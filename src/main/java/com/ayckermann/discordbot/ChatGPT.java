@@ -14,14 +14,18 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ChatGPT {
 
-    public static String getChatGPTResponse(String message) throws IOException, URISyntaxException {
+    public String getChatGPTResponse(String message) throws IOException, URISyntaxException {
         Dotenv dotenv = Dotenv.load();
         String API = dotenv.get("OPENAI_API");
+        
         String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
         
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -63,13 +67,35 @@ public class ChatGPT {
         return responseString;
     }
     
-       public static void main(String[] args) {
-        try {
-            String userMessage = "How to cook indomie";
-            String response = getChatGPTResponse(userMessage);
-            System.out.println("ChatGPT response: " + response);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public String extractMessageFromResponse(String response) {
+        JsonObject jsonResponse = new Gson().fromJson(response, JsonObject.class);
+        JsonArray replies = jsonResponse.getAsJsonArray("choices");
+
+        if (replies != null && !replies.isJsonNull() && replies.size() > 0) {
+            JsonElement replyElement = replies.get(0);
+            if (replyElement != null && !replyElement.isJsonNull()) {
+                JsonObject reply = replyElement.getAsJsonObject();
+                return reply.get("message").getAsJsonObject().get("content").getAsString();
+            }
         }
+
+        return null;
+    
     }
+    
+    String gpt(String userMessage) throws IOException{
+        
+        try {
+            String response = getChatGPTResponse(userMessage);
+            String output = extractMessageFromResponse(response);
+            
+            return output;
+            
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(ChatGPT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
+    }
+    
 }

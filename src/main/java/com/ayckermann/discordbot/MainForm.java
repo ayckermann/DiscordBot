@@ -271,17 +271,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void togelStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togelStartActionPerformed
-        Dotenv dotenv = Dotenv.load();
-        String token = dotenv.get("DISCORD_TOKEN");
-        try{
-            jda = (JDA) JDABuilder.createDefault(token)
-                .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.MESSAGE_CONTENT)                .setActivity(Activity.playing("Your Mom"))
-                .addEventListeners(new DiscordBot())
-                .build();
-        }
-        catch (Exception e){
-                System.out.println(e);
-        }
+        jda = new DiscordBot().jda;
     }//GEN-LAST:event_togelStartActionPerformed
     
     ActionListener actionListener = new ActionListener() {

@@ -105,14 +105,14 @@ class BotCommand extends ListenerAdapter{
             
             String message = option.getAsString();
             
-            String response = "HI";
-//            try {
-//                response = new ChatGPT().gpt(message);
-//            } catch (IOException ex) {
-//                System.out.println("ex");
-//                response = "gpt error";
-//                return;
-//            }
+            String response = "";
+            try {
+                response = new ChatGPT().gpt(message);
+            } catch (IOException ex) {
+                System.out.println("ex");
+                response = "gpt error";
+                return;
+            }
                     
             event.getHook().sendMessage(message + " " + response).queue();
         }

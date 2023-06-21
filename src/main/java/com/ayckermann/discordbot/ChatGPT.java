@@ -50,7 +50,7 @@ public class ChatGPT {
         messages.add(userMessage);
 
         payload.add("messages", messages);
-        payload.addProperty("model", "text-ada-001");
+        payload.addProperty("model", "gpt-3.5-turbo");
 
         String requestBody = new Gson().toJson(payload);
         HttpEntity requestEntity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);

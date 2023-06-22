@@ -15,6 +15,7 @@ public class CommandForm extends javax.swing.JFrame {
      */
     public CommandForm() {
         initComponents();
+        txtId.setVisible(false);
     }
 
     /**
@@ -39,12 +40,6 @@ public class CommandForm extends javax.swing.JFrame {
         btnDelete = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtMsg1 = new javax.swing.JTextField();
-        menuBar = new javax.swing.JMenuBar();
-        menuMessage = new javax.swing.JMenu();
-        menuCommand = new javax.swing.JMenu();
-        menuBroadcast = new javax.swing.JMenu();
-        menuUser = new javax.swing.JMenu();
-        menuServer = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -142,49 +137,6 @@ public class CommandForm extends javax.swing.JFrame {
             }
         });
 
-        menuMessage.setText("Message");
-        menuMessage.setFocusable(false);
-        menuMessage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuMessageActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuMessage);
-
-        menuCommand.setText("Command");
-        menuCommand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuCommandActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuCommand);
-
-        menuBroadcast.setText("Broadcast");
-        menuBroadcast.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuBroadcastActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuBroadcast);
-
-        menuUser.setText("User List");
-        menuUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuUserActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuUser);
-
-        menuServer.setText("Server List");
-        menuServer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuServerActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuServer);
-
-        setJMenuBar(menuBar);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -239,7 +191,7 @@ public class CommandForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addContainerGap(223, Short.MAX_VALUE))
+                .addContainerGap(246, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(43, 43, 43)
@@ -285,26 +237,6 @@ public class CommandForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMsg1ActionPerformed
 
-    private void menuMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMessageActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuMessageActionPerformed
-
-    private void menuCommandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCommandActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuCommandActionPerformed
-
-    private void menuBroadcastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBroadcastActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuBroadcastActionPerformed
-
-    private void menuUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuUserActionPerformed
-
-    private void menuServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuServerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuServerActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -349,12 +281,6 @@ public class CommandForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenu menuBroadcast;
-    private javax.swing.JMenu menuCommand;
-    private javax.swing.JMenu menuMessage;
-    private javax.swing.JMenu menuServer;
-    private javax.swing.JMenu menuUser;
     private javax.swing.JTable tblTable;
     private javax.swing.JTextField txtCommand;
     private javax.swing.JTextField txtId;

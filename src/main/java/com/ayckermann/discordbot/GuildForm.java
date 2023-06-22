@@ -28,12 +28,6 @@ public class GuildForm extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        menuBar = new javax.swing.JMenuBar();
-        menuMessage = new javax.swing.JMenu();
-        menuCommand = new javax.swing.JMenu();
-        menuBroadcast = new javax.swing.JMenu();
-        menuUser = new javax.swing.JMenu();
-        menuServer = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,49 +49,6 @@ public class GuildForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        menuMessage.setText("Message");
-        menuMessage.setFocusable(false);
-        menuMessage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuMessageActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuMessage);
-
-        menuCommand.setText("Command");
-        menuCommand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuCommandActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuCommand);
-
-        menuBroadcast.setText("Broadcast");
-        menuBroadcast.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuBroadcastActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuBroadcast);
-
-        menuUser.setText("User List");
-        menuUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuUserActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuUser);
-
-        menuServer.setText("Server List");
-        menuServer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuServerActionPerformed(evt);
-            }
-        });
-        menuBar.add(menuServer);
-
-        setJMenuBar(menuBar);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,33 +61,13 @@ public class GuildForm extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
+                .addContainerGap(44, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void menuMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMessageActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuMessageActionPerformed
-
-    private void menuCommandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCommandActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuCommandActionPerformed
-
-    private void menuBroadcastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBroadcastActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuBroadcastActionPerformed
-
-    private void menuUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuUserActionPerformed
-
-    private void menuServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuServerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuServerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -176,11 +107,5 @@ public class GuildForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenu menuBroadcast;
-    private javax.swing.JMenu menuCommand;
-    private javax.swing.JMenu menuMessage;
-    private javax.swing.JMenu menuServer;
-    private javax.swing.JMenu menuUser;
     // End of variables declaration//GEN-END:variables
 }

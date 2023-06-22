@@ -9,7 +9,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -35,6 +37,7 @@ public class DiscordBot{
                 .build().awaitReady();
             
             jda.upsertCommand("joke","Tell a joke").queue();
+            jda.upsertCommand("meme","Generate meme").queue();
             
             jda.upsertCommand("gpt","Ask me anything")
                     .addOption(OptionType.STRING, "message", "write message carefully because every generated message is paid", true)
@@ -56,7 +59,7 @@ class BotCommand extends ListenerAdapter{
         ResultSet resultSet = db.load(query, message);
         try {
             while(resultSet.next()){
-                response = resultSet.getString("respond");
+                response = resultSet.getString(1);
             }
         } catch (SQLException ex) {
             System.out.println("Error " + ex + " : tidak ada messae yang cocok ");;
@@ -68,19 +71,49 @@ class BotCommand extends ListenerAdapter{
     @Override
     public void onMessageReceived( MessageReceivedEvent event){
 
+       if(event.isFromGuild()){
+           if(event.getMessage().getMentions().isMentioned(event.getJDA().getSelfUser())){
+                if(!event.getAuthor().isBot()){
+                    MessageChannel channel = event.getChannel(); 
+                    String content = event.getMessage().getContentDisplay();
+                    
+                    String mention = event.getJDA().getSelfUser().getName();
+                    mention = "@"+mention;
+                    String message = content.replace(mention, "").trim();
+                 
+                    System.out.println(message);
+                    System.out.println(mention);
 
-       if(!event.getAuthor().isBot()){
-           String message = event.getMessage().getContentRaw();
-           MessageChannel channel = event.getChannel(); 
+                    Object[] data = {message};
+                    String response = response("SELECT respond FROM msg_respond WHERE message=?", data);
 
-           Object[] data = {message};
-           String response = response("SELECT respond FROM msg_respond WHERE message=?", data);
+                    if(!response.equals("")){
+                        channel.sendMessage(response).queue(); 
+                    }
+                    if(content.equals(mention)){
+                        String mentionedUser = event.getMessage().getAuthor().getAsMention();
+                        channel.sendMessage("Gimana ?" + mentionedUser).queue(); 
+                    }
 
-           if(!response.equals("")){
-               channel.sendMessage(response).queue(); 
+                }
            }
+       }
+       else{
+            if(!event.getAuthor().isBot()){
+            String message = event.getMessage().getContentRaw();
+            MessageChannel channel = event.getChannel(); 
 
-       }  
+            Object[] data = {message};
+            String response = response("SELECT respond FROM msg_respond WHERE message=?", data);
+
+            if(!response.equals("")){
+                channel.sendMessage(response).queue(); 
+            }
+
+        }
+       }
+
+
     }
 
     @Override
@@ -93,6 +126,21 @@ class BotCommand extends ListenerAdapter{
             event.getHook().sendMessage("bapak kamu jokowi ya?").queue();
         
         }
+        else if(event.getName().equals("meme")){
+            String meme="";
+            
+            try {
+                meme = new Meme().generateMeme();
+            } catch (IOException ex) {
+                Logger.getLogger(BotCommand.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BotCommand.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            event.deferReply().queue();
+            System.out.println(meme);
+            event.getHook().sendMessage("Bapak kamu jokowi ya?").queue();
+            
+        }
         else if(event.getName().equals("gpt")){
             event.deferReply().queue();
             
@@ -104,17 +152,31 @@ class BotCommand extends ListenerAdapter{
             }
             
             String message = option.getAsString();
-            
-            String response = "";
-            try {
-                response = new ChatGPT().gpt(message);
-            } catch (IOException ex) {
-                System.out.println("ex");
-                response = "gpt error";
-                return;
+            Object[] data = {"gpt",message};
+            String response = response("SELECT respond FROM slash_command WHERE command=? AND parameter=?", data);
+            if(!response.equals("")){
+                event.getHook().sendMessage(message + " " + response).queue();
             }
+            else{
+                try {
+                    response = new ChatGPT().gpt(message);
+                    event.getHook().sendMessage(message + " " + response).queue();
                     
-            event.getHook().sendMessage(message + " " + response).queue();
+                    Object[] data2 = {"gpt",message,response};
+                    db.edit("INSERT INTO slash_command (command,parameter,respond)"
+                            + "VALUES(?,?,?)",data2 );
+     
+                    
+                } catch (IOException ex) {
+                    System.out.println("ex");
+                    response = "gpt error";
+                    return;
+                }
+            }
+     
+
+                    
+            
         }
             
 

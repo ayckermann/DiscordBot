@@ -38,12 +38,6 @@ public class BroadcastForm extends javax.swing.JFrame {
         jSpinner1 = new javax.swing.JSpinner();
         jSpinner2 = new javax.swing.JSpinner();
         JLabel3 = new javax.swing.JLabel();
-        menuBar1 = new javax.swing.JMenuBar();
-        menuMessage1 = new javax.swing.JMenu();
-        menuCommand = new javax.swing.JMenu();
-        menuBroadcast = new javax.swing.JMenu();
-        menuUser = new javax.swing.JMenu();
-        menuServer = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,49 +101,6 @@ public class BroadcastForm extends javax.swing.JFrame {
 
         JLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         JLabel3.setText("Hour");
-
-        menuMessage1.setText("Message");
-        menuMessage1.setFocusable(false);
-        menuMessage1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuMessage1ActionPerformed(evt);
-            }
-        });
-        menuBar1.add(menuMessage1);
-
-        menuCommand.setText("Command");
-        menuCommand.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuCommandActionPerformed(evt);
-            }
-        });
-        menuBar1.add(menuCommand);
-
-        menuBroadcast.setText("Broadcast");
-        menuBroadcast.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuBroadcastActionPerformed(evt);
-            }
-        });
-        menuBar1.add(menuBroadcast);
-
-        menuUser.setText("User List");
-        menuUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuUserActionPerformed(evt);
-            }
-        });
-        menuBar1.add(menuUser);
-
-        menuServer.setText("Server List");
-        menuServer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuServerActionPerformed(evt);
-            }
-        });
-        menuBar1.add(menuServer);
-
-        setJMenuBar(menuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -224,26 +175,6 @@ public class BroadcastForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnUpdateActionPerformed
 
-    private void menuMessage1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMessage1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuMessage1ActionPerformed
-
-    private void menuCommandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCommandActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuCommandActionPerformed
-
-    private void menuBroadcastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBroadcastActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuBroadcastActionPerformed
-
-    private void menuUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuUserActionPerformed
-
-    private void menuServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuServerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuServerActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -290,14 +221,6 @@ public class BroadcastForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuBar menuBar1;
-    private javax.swing.JMenu menuBroadcast;
-    private javax.swing.JMenu menuCommand;
-    private javax.swing.JMenu menuMessage;
-    private javax.swing.JMenu menuMessage1;
-    private javax.swing.JMenu menuServer;
-    private javax.swing.JMenu menuUser;
     private javax.swing.JTable tblTable;
     private javax.swing.JTextArea txtRespond;
     // End of variables declaration//GEN-END:variables

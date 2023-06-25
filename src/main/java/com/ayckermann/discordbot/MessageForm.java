@@ -29,6 +29,7 @@ public class MessageForm extends javax.swing.JFrame {
      */
     private Database db = new Database();
     DiscordBot jda = new DiscordBot();
+    
     public MessageForm() throws SQLException {
         initComponents();
         txtId.setVisible(false);

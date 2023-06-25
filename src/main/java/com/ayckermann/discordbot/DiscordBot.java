@@ -1,27 +1,17 @@
 package com.ayckermann.discordbot;
 
-import com.mysql.cj.Query;
+
 import io.github.cdimascio.dotenv.Dotenv;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-
-
-
 
 public class DiscordBot{
     Dotenv dotenv = Dotenv.load();
@@ -33,10 +23,12 @@ public class DiscordBot{
             jda = (JDA) JDABuilder.createDefault(token)
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.MESSAGE_CONTENT)
                 .setActivity(Activity.playing("Your Mom"))
-                .addEventListeners(new BotCommand())
+                .addEventListeners(new BotCommands())
                 .build().awaitReady();
             
-            jda.upsertCommand("joke","Tell a joke").queue();
+            jda.upsertCommand("joke","Tell a joke")
+                    .addOption(OptionType.STRING, "type", "type a joke you wanted to generate ex : dark", false)
+                    .queue();
             jda.upsertCommand("meme","Generate meme").queue();
             
             jda.upsertCommand("gpt","Ask me anything")
@@ -49,137 +41,51 @@ public class DiscordBot{
     }
 }
 
-class BotCommand extends ListenerAdapter{
+class Broadcast extends DiscordBot{
     private Database db = new Database();
- 
     
-    String response(String query, Object[] message){
-        String response = "";
-        
-        ResultSet resultSet = db.load(query, message);
-        try {
-            while(resultSet.next()){
-                response = resultSet.getString(1);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error " + ex + " : tidak ada messae yang cocok ");;
+    
+    public void broadcastToUsersInDb(String message) throws SQLException{
+        ResultSet resultSet = db.load("SELECT userId FROM user", null);
+        while (resultSet.next()) {
+            String id = resultSet.getString("userId");
+            
+           super.jda.retrieveUserById(id).queue((user) -> {
+                user.openPrivateChannel().queue((privateChannel) ->
+                    privateChannel.sendMessage(message).queue()
+                );
+            });
+            
+            
         }
-        
-        return response;
-        
     }
-    @Override
-    public void onMessageReceived( MessageReceivedEvent event){
-
-       if(event.isFromGuild()){
-           if(event.getMessage().getMentions().isMentioned(event.getJDA().getSelfUser())){
-                if(!event.getAuthor().isBot()){
-                    MessageChannel channel = event.getChannel(); 
-                    String content = event.getMessage().getContentDisplay();
-                    
-                    String mention = event.getJDA().getSelfUser().getName();
-                    mention = "@"+mention;
-                    String message = content.replace(mention, "").trim();
-                 
-                    System.out.println(message);
-                    System.out.println(mention);
-
-                    Object[] data = {message};
-                    String response = response("SELECT respond FROM msg_respond WHERE message=?", data);
-
-                    if(!response.equals("")){
-                        channel.sendMessage(response).queue(); 
-                    }
-                    if(content.equals(mention)){
-                        String mentionedUser = event.getMessage().getAuthor().getAsMention();
-                        channel.sendMessage("Gimana ?" + mentionedUser).queue(); 
-                    }
-
-                }
-           }
-       }
-       else{
-            if(!event.getAuthor().isBot()){
-            String message = event.getMessage().getContentRaw();
-            MessageChannel channel = event.getChannel(); 
-
-            Object[] data = {message};
-            String response = response("SELECT respond FROM msg_respond WHERE message=?", data);
-
-            if(!response.equals("")){
-                channel.sendMessage(response).queue(); 
-            }
-
+    public void broadcastToAllGuild(String message) throws SQLException{
+        ResultSet resultSet = db.load("SELECT defaultChannel FROM guild", null);
+        while (resultSet.next()) {
+            String id = resultSet.getString("defaultChannel");
+            super.jda.getTextChannelById(id).sendMessage(message).queue();
+            
         }
-       }
-
-
+    }
+     public void broadcastToGuild(String guildId, String message) throws SQLException{
+        Object[] data = {guildId};
+        ResultSet resultSet = db.load("SELECT defaultChannel FROM guild WHERE guildId=?", data );
+        while (resultSet.next()) {
+            String id = resultSet.getString("defaultChannel");
+            super.jda.getTextChannelById(id).sendMessage(message).queue();
+            
+        }
+    }
+    public void broadcastToGuildMembers(String guildId, String message) throws SQLException{
+        Guild guild = jda.getGuildById(guildId);
+        
+        for (Member member : guild.getMembers()) {
+            if (!member.getUser().isBot()) {
+                member.getUser().openPrivateChannel().queue((privateChannel) ->
+                    privateChannel.sendMessage(message).queue()
+                );  
+            }
+        }
     }
 
-    @Override
-    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-//        super.onSlashCommandInteraction(event); 
-
-        if(event.getName().equals("joke")){
-            event.deferReply().queue();
-            
-            event.getHook().sendMessage("bapak kamu jokowi ya?").queue();
-        
-        }
-        else if(event.getName().equals("meme")){
-            String meme="";
-            
-            try {
-                meme = new Meme().generateMeme();
-            } catch (IOException ex) {
-                Logger.getLogger(BotCommand.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(BotCommand.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            event.deferReply().queue();
-            System.out.println(meme);
-            event.getHook().sendMessage("Bapak kamu jokowi ya?").queue();
-            
-        }
-        else if(event.getName().equals("gpt")){
-            event.deferReply().queue();
-            
-            OptionMapping option= event.getOption("message");
-            
-            if(option == null){
-                event.getHook().sendMessage("message not good").queue();
-                return;
-            }
-            
-            String message = option.getAsString();
-            Object[] data = {"gpt",message};
-            String response = response("SELECT respond FROM slash_command WHERE command=? AND parameter=?", data);
-            if(!response.equals("")){
-                event.getHook().sendMessage(message + " " + response).queue();
-            }
-            else{
-                try {
-                    response = new ChatGPT().gpt(message);
-                    event.getHook().sendMessage(message + " " + response).queue();
-                    
-                    Object[] data2 = {"gpt",message,response};
-                    db.edit("INSERT INTO slash_command (command,parameter,respond)"
-                            + "VALUES(?,?,?)",data2 );
-     
-                    
-                } catch (IOException ex) {
-                    System.out.println("ex");
-                    response = "gpt error";
-                    return;
-                }
-            }
-     
-
-                    
-            
-        }
-            
-
-    }
-      
 }

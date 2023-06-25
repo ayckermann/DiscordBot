@@ -7,10 +7,7 @@ package com.ayckermann.discordbot;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/**
- *
- * @author ASUS VIVOBOOK
- */
+
 public class Database {
     Connection connection;
     
@@ -21,6 +18,11 @@ public class Database {
             connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost/discordbot",
                 "root", "");
+            if(connection != null){
+                System.out.println("DATABASE CONNECTED");
+            }else{
+                System.out.println("FAILED TO CONNECT TO DATABASE ");
+            }
         }
         catch (Exception exception) {
                    System.out.println(exception);

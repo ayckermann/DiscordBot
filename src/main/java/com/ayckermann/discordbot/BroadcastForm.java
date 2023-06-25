@@ -4,6 +4,12 @@
  */
 package com.ayckermann.discordbot;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.dv8tion.jda.api.entities.Guild;
+
 /**
  *
  * @author ASUS VIVOBOOK
@@ -13,8 +19,11 @@ public class BroadcastForm extends javax.swing.JFrame {
     /**
      * Creates new form BroadcastForm
      */
-    public BroadcastForm() {
+    Database db = new Database();
+    Broadcast jda = new Broadcast();
+    public BroadcastForm() throws SQLException {
         initComponents();
+        loadGuild();
     }
 
     /**
@@ -28,16 +37,14 @@ public class BroadcastForm extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTable = new javax.swing.JTable();
-        JLabel2 = new javax.swing.JLabel();
-        btnAdd = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
+        btnBroadUsers = new javax.swing.JButton();
+        btdnBroadGuildMembers = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtRespond = new javax.swing.JTextArea();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jSpinner1 = new javax.swing.JSpinner();
-        jSpinner2 = new javax.swing.JSpinner();
-        JLabel3 = new javax.swing.JLabel();
+        txtBroadcast = new javax.swing.JTextArea();
+        btnBroadAllGuild = new javax.swing.JButton();
+        ddGuild = new javax.swing.JComboBox<>();
+        btnBroadGuild = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,36 +78,48 @@ public class BroadcastForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblTable);
 
-        JLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        JLabel2.setText("Date");
-
-        btnAdd.setBackground(new java.awt.Color(0, 102, 0));
-        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdd.setText("BROADCAST NOW");
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+        btnBroadUsers.setBackground(new java.awt.Color(0, 102, 0));
+        btnBroadUsers.setForeground(new java.awt.Color(255, 255, 255));
+        btnBroadUsers.setText("TO USERS IN DATABASE");
+        btnBroadUsers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
+                btnBroadUsersActionPerformed(evt);
             }
         });
 
-        btnUpdate.setBackground(new java.awt.Color(153, 153, 0));
-        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdate.setText("SCHEDULE");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+        btdnBroadGuildMembers.setBackground(new java.awt.Color(102, 102, 0));
+        btdnBroadGuildMembers.setForeground(new java.awt.Color(255, 255, 255));
+        btdnBroadGuildMembers.setText("TO SELECTED GUILD'S MEMBERS");
+        btdnBroadGuildMembers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
+                btdnBroadGuildMembersActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Message");
 
-        txtRespond.setColumns(20);
-        txtRespond.setRows(5);
-        jScrollPane2.setViewportView(txtRespond);
+        txtBroadcast.setColumns(20);
+        txtBroadcast.setRows(5);
+        jScrollPane2.setViewportView(txtBroadcast);
 
-        JLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        JLabel3.setText("Hour");
+        btnBroadAllGuild.setBackground(new java.awt.Color(0, 102, 51));
+        btnBroadAllGuild.setForeground(new java.awt.Color(255, 255, 255));
+        btnBroadAllGuild.setText("TO GUILDS IN DATABASE");
+        btnBroadAllGuild.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBroadAllGuildActionPerformed(evt);
+            }
+        });
+
+        btnBroadGuild.setBackground(new java.awt.Color(102, 102, 0));
+        btnBroadGuild.setForeground(new java.awt.Color(255, 255, 255));
+        btnBroadGuild.setText("TO SELECTED GUILD");
+        btnBroadGuild.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBroadGuildActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,70 +129,99 @@ public class BroadcastForm extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 769, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(172, 172, 172)
+                        .addComponent(ddGuild, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JLabel2)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(JLabel3)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(16, 16, 16))))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btnBroadAllGuild, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btdnBroadGuildMembers, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnBroadUsers, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnBroadGuild, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(87, 87, 87)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
-                    .addComponent(JLabel2))
+                    .addComponent(ddGuild, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21)
-                        .addComponent(JLabel3)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(btnBroadUsers)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(19, 19, 19)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addComponent(btnBroadAllGuild)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBroadGuild)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btdnBroadGuildMembers)))
+                .addGap(26, 26, 26))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    void loadGuild() throws SQLException{
+        ResultSet resultSet= db.load("SELECT * FROM guild", null);
+        while (resultSet.next()) {            
+            String name = resultSet.getString("guildName");
+            String id = resultSet.getString("guildId");
+            ddGuild.addItem(name + "/" +id);
+        }
+    }
     private void tblTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTableMouseClicked
 
     }//GEN-LAST:event_tblTableMouseClicked
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    private void btnBroadUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBroadUsersActionPerformed
+        try {
+            jda.broadcastToUsersInDb(txtBroadcast.getText());
+        } catch (SQLException ex) {
+            Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnBroadUsersActionPerformed
 
-    }//GEN-LAST:event_btnAddActionPerformed
+    private void btdnBroadGuildMembersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btdnBroadGuildMembersActionPerformed
+        String comboBox = (String) ddGuild.getSelectedItem();
+        String[] parts = comboBox.split("/");
+        String guildId = parts[1];
+        System.out.println(guildId);
+        try {
+            jda.broadcastToGuildMembers(guildId,txtBroadcast.getText());
+        } catch (SQLException ex) {
+            Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btdnBroadGuildMembersActionPerformed
 
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+    private void btnBroadAllGuildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBroadAllGuildActionPerformed
+         try {
+            jda.broadcastToAllGuild(txtBroadcast.getText());
+        } catch (SQLException ex) {
+            Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnBroadAllGuildActionPerformed
 
-    }//GEN-LAST:event_btnUpdateActionPerformed
+    private void btnBroadGuildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBroadGuildActionPerformed
+        String comboBox = (String) ddGuild.getSelectedItem();
+        String[] parts = comboBox.split("/");
+        String guildId = parts[1];
+        System.out.println(guildId);
+        try {
+            jda.broadcastToGuild(guildId,txtBroadcast.getText());
+        } catch (SQLException ex) {
+            Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnBroadGuildActionPerformed
 
     /**
      * @param args the command line arguments
@@ -205,23 +253,25 @@ public class BroadcastForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BroadcastForm().setVisible(true);
+                try {
+                    new BroadcastForm().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel JLabel2;
-    private javax.swing.JLabel JLabel3;
-    private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnUpdate;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JButton btdnBroadGuildMembers;
+    private javax.swing.JButton btnBroadAllGuild;
+    private javax.swing.JButton btnBroadGuild;
+    private javax.swing.JButton btnBroadUsers;
+    private javax.swing.JComboBox<String> ddGuild;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTable tblTable;
-    private javax.swing.JTextArea txtRespond;
+    private javax.swing.JTextArea txtBroadcast;
     // End of variables declaration//GEN-END:variables
 }

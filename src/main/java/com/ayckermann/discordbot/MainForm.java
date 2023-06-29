@@ -4,6 +4,20 @@
  */
 package com.ayckermann.discordbot;
 
+import java.awt.Component;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultSingleSelectionModel;
+import javax.swing.JOptionPane;
+import javax.swing.SingleSelectionModel;
+import javax.swing.table.DefaultTableModel;
 import net.dv8tion.jda.api.JDA;
 
 /**
@@ -12,12 +26,30 @@ import net.dv8tion.jda.api.JDA;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainForm
-     */
-    private JDA jda;
-    public MainForm() {
+    Database db = new Database();
+    Broadcast jda = new Broadcast();
+    
+    SingleSelectionModel selectionModel = new DefaultSingleSelectionModel();
+
+    public MainForm() throws SQLException {
         initComponents();
+        menuBar.setSelectionModel(selectionModel);
+        panelBroadcast.setVisible(false);
+        
+        //Message
+        tblMessage.getColumnModel().getColumn(0).setMaxWidth(25);
+        tblMessage.getColumnModel().getColumn(1).setMinWidth(100);
+        tblMessage.getColumnModel().getColumn(2).setMinWidth(200);
+        txtIdMessage.setVisible(false);
+        this.dataMessage();
+        
+        //broadcast
+        tblBroadcast.getColumnModel().getColumn(0).setMaxWidth(25);
+        tblBroadcast.getColumnModel().getColumn(1).setMinWidth(150);
+        tblBroadcast.getColumnModel().getColumn(2).setMinWidth(100);
+        tblBroadcast.getColumnModel().getColumn(3).setMinWidth(80);
+        this.dataBroadcast();
+        this.loadGuild();
         
     }
 
@@ -30,46 +62,668 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        togelStart = new javax.swing.JToggleButton();
+        panelMessage = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblMessage = new javax.swing.JTable();
+        txtMsgMessage = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtRespondMessage = new javax.swing.JTextArea();
+        btnAddMessage = new javax.swing.JButton();
+        labelMsgMessage = new javax.swing.JLabel();
+        labelRespondMessage = new javax.swing.JLabel();
+        btnDeleteMessage = new javax.swing.JButton();
+        btnUpdateMessage = new javax.swing.JButton();
+        txtIdMessage = new javax.swing.JTextField();
+        panelBroadcast = new javax.swing.JPanel();
+        spBroadcast = new javax.swing.JScrollPane();
+        tblBroadcast = new javax.swing.JTable();
+        labelMsgBroadcast = new javax.swing.JLabel();
+        spBrodcast1 = new javax.swing.JScrollPane();
+        txtBroadcast = new javax.swing.JTextArea();
+        ddGuild = new javax.swing.JComboBox<>();
+        ddBroadType = new javax.swing.JComboBox<>();
+        btnBroadcast = new javax.swing.JButton();
+        btnSchedule = new javax.swing.JButton();
+        inputDate = new com.toedter.calendar.JDateChooser();
+        inputHour = new javax.swing.JSpinner();
+        inputMinute = new javax.swing.JSpinner();
+        labelDate = new javax.swing.JLabel();
+        labelDate1 = new javax.swing.JLabel();
+        labelDate2 = new javax.swing.JLabel();
+        menuBar = new javax.swing.JMenuBar();
+        menuMessage = new javax.swing.JMenu();
+        menuCommand = new javax.swing.JMenu();
+        menuBroadcast = new javax.swing.JMenu();
+        menuUser = new javax.swing.JMenu();
+        menuGuild = new javax.swing.JMenu();
+        menuLog = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Aya Bot Admin");
+        setName("Aya Bot Admin"); // NOI18N
+        setSize(new java.awt.Dimension(800, 450));
 
-        togelStart.setBackground(new java.awt.Color(0, 51, 102));
-        togelStart.setForeground(new java.awt.Color(255, 255, 255));
-        togelStart.setText("START");
-        togelStart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                togelStartActionPerformed(evt);
+        tblMessage.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Message", "Respond"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
+        tblMessage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMessageMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblMessage);
+
+        txtMsgMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMsgMessageActionPerformed(evt);
+            }
+        });
+
+        txtRespondMessage.setColumns(20);
+        txtRespondMessage.setRows(5);
+        jScrollPane2.setViewportView(txtRespondMessage);
+
+        btnAddMessage.setBackground(new java.awt.Color(0, 102, 0));
+        btnAddMessage.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddMessage.setText("ADD");
+        btnAddMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddMessageActionPerformed(evt);
+            }
+        });
+
+        labelMsgMessage.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelMsgMessage.setText("Message");
+
+        labelRespondMessage.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelRespondMessage.setText("Respond");
+
+        btnDeleteMessage.setBackground(new java.awt.Color(153, 0, 0));
+        btnDeleteMessage.setForeground(new java.awt.Color(255, 255, 255));
+        btnDeleteMessage.setText("DELETE");
+        btnDeleteMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteMessageActionPerformed(evt);
+            }
+        });
+
+        btnUpdateMessage.setBackground(new java.awt.Color(153, 153, 0));
+        btnUpdateMessage.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdateMessage.setText("UPDATE");
+        btnUpdateMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateMessageActionPerformed(evt);
+            }
+        });
+
+        txtIdMessage.setEditable(false);
+        txtIdMessage.setText("id");
+        txtIdMessage.setFocusable(false);
+        txtIdMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdMessageActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelMessageLayout = new javax.swing.GroupLayout(panelMessage);
+        panelMessage.setLayout(panelMessageLayout);
+        panelMessageLayout.setHorizontalGroup(
+            panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMessageLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelMessageLayout.createSequentialGroup()
+                        .addComponent(labelRespondMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtIdMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(114, 114, 114))
+                    .addGroup(panelMessageLayout.createSequentialGroup()
+                        .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(labelMsgMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelMessageLayout.createSequentialGroup()
+                                    .addComponent(btnAddMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(27, 27, 27)
+                                    .addComponent(btnUpdateMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(panelMessageLayout.createSequentialGroup()
+                                    .addGap(243, 243, 243)
+                                    .addComponent(btnDeleteMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtMsgMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
+                .addGap(15, 15, 15))
+        );
+        panelMessageLayout.setVerticalGroup(
+            panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelMessageLayout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                    .addGroup(panelMessageLayout.createSequentialGroup()
+                        .addComponent(labelMsgMessage)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtMsgMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtIdMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelRespondMessage, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAddMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUpdateMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 14, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+
+        tblBroadcast.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Message", "Destination", "Date"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblBroadcast.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBroadcastMouseClicked(evt);
+            }
+        });
+        spBroadcast.setViewportView(tblBroadcast);
+
+        labelMsgBroadcast.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelMsgBroadcast.setText("Message");
+
+        txtBroadcast.setColumns(20);
+        txtBroadcast.setRows(5);
+        spBrodcast1.setViewportView(txtBroadcast);
+
+        ddBroadType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TO USERS IN DATABASE", "TO GUILDS IN DATABASE", "TO SELECTED GUILD", "TO SELECTED GUILD'S MEMBER" }));
+
+        btnBroadcast.setBackground(new java.awt.Color(0, 102, 51));
+        btnBroadcast.setForeground(new java.awt.Color(255, 255, 255));
+        btnBroadcast.setText("BROADCAST NOW");
+        btnBroadcast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBroadcastActionPerformed(evt);
+            }
+        });
+
+        btnSchedule.setBackground(new java.awt.Color(153, 153, 0));
+        btnSchedule.setForeground(new java.awt.Color(255, 255, 255));
+        btnSchedule.setText("SCHEDULE BROADCAST");
+        btnSchedule.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnScheduleActionPerformed(evt);
+            }
+        });
+
+        inputDate.setDateFormatString("dd/MM/yyyy");
+        inputDate.setMinSelectableDate(date());
+
+        inputHour.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
+
+        inputMinute.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+
+        labelDate.setText("Date");
+
+        labelDate1.setText("Hour");
+
+        labelDate2.setText("Minute");
+
+        javax.swing.GroupLayout panelBroadcastLayout = new javax.swing.GroupLayout(panelBroadcast);
+        panelBroadcast.setLayout(panelBroadcastLayout);
+        panelBroadcastLayout.setHorizontalGroup(
+            panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBroadcastLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelMsgBroadcast, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelBroadcastLayout.createSequentialGroup()
+                        .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(spBrodcast1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelBroadcastLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(ddGuild, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(ddBroadType, 0, 345, Short.MAX_VALUE)))
+                            .addGroup(panelBroadcastLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(btnBroadcast)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelDate, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(inputDate, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(panelBroadcastLayout.createSequentialGroup()
+                                            .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(inputHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(labelDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(labelDate2)
+                                                .addComponent(inputMinute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(btnSchedule))))
+                        .addGap(28, 28, 28)
+                        .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        panelBroadcastLayout.setVerticalGroup(
+            panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBroadcastLayout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(labelMsgBroadcast)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                    .addGroup(panelBroadcastLayout.createSequentialGroup()
+                        .addComponent(spBrodcast1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17)
+                        .addComponent(ddBroadType, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)
+                        .addComponent(ddGuild, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labelDate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(inputDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labelDate1)
+                            .addComponent(labelDate2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(inputHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputMinute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnBroadcast, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSchedule, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)))
+                .addContainerGap())
+        );
+
+        menuBar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        menuBar.setSelectionModel(null);
+
+        menuMessage.setText("Message");
+        menuMessage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuMessageMouseClicked(evt);
+            }
+        });
+        menuBar.add(menuMessage);
+
+        menuCommand.setText("Command");
+        menuCommand.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuCommandMouseClicked(evt);
+            }
+        });
+        menuBar.add(menuCommand);
+
+        menuBroadcast.setText("Broadcast");
+        menuBroadcast.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuBroadcastMouseClicked(evt);
+            }
+        });
+        menuBar.add(menuBroadcast);
+
+        menuUser.setText("User List");
+        menuUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuUserMouseClicked(evt);
+            }
+        });
+        menuBar.add(menuUser);
+
+        menuGuild.setText("Guild List");
+        menuGuild.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuGuildMouseClicked(evt);
+            }
+        });
+        menuBar.add(menuGuild);
+
+        menuLog.setText("Log");
+        menuLog.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuLogMouseClicked(evt);
+            }
+        });
+        menuBar.add(menuLog);
+
+        setJMenuBar(menuBar);
+        menuBar.getAccessibleContext().setAccessibleParent(menuMessage);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addComponent(panelMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(344, 344, 344)
-                    .addComponent(togelStart, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(345, Short.MAX_VALUE)))
+                .addComponent(panelBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addComponent(panelMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(213, 213, 213)
-                    .addComponent(togelStart)
-                    .addContainerGap(214, Short.MAX_VALUE)))
+                .addComponent(panelBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void togelStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togelStartActionPerformed
-        jda = new DiscordBot().jda;
-    }//GEN-LAST:event_togelStartActionPerformed
+    public void dataMessage(){
+
+        try {
+            ResultSet resultSet =  db.load("SELECT * FROM msg_respond", null);
+            DefaultTableModel tableModel = (DefaultTableModel)tblMessage.getModel();
+            tableModel.setRowCount(0); //reset data
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("idMessage");
+                String message =  resultSet.getString("message");
+                String respond = resultSet.getString("respond");
+
+                Object[] rowData = {id,message,respond};
+                tableModel.addRow(rowData);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void setFieldMessage(){
+        int row = tblMessage.getSelectedRow();
+        String id = Integer.toString((int)tblMessage.getValueAt(row,0));
+        txtIdMessage.setText(id);
+        txtMsgMessage.setText((String)tblMessage.getValueAt(row,1));
+        txtRespondMessage.setText((String)tblMessage.getValueAt(row,2));
+    }
+    void dataBroadcast(){
+     try {
+            ResultSet resultSet =  db.load("SELECT * FROM broadcast", null);
+            DefaultTableModel tableModel = (DefaultTableModel)tblBroadcast.getModel();
+            tableModel.setRowCount(0); //reset data
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("idBroadcast");
+                String message =  resultSet.getString("messageBroadcast");
+                String destiniation = resultSet.getString("sentTo");
+                String date = resultSet.getString("dateSent");
+
+                Object[] rowData = {id,message,destiniation,date};
+                tableModel.addRow(rowData);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    void loadGuild() throws SQLException{
+        ResultSet resultSet= db.load("SELECT * FROM guild", null);
+        while (resultSet.next()) {            
+            String name = resultSet.getString("guildName");
+            String id = resultSet.getString("guildId");
+            ddGuild.addItem(name + "/" +id);
+        }
+    }
+    
+    Date date(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        // Convert LocalDateTime to Date
+        ZoneId zoneId = ZoneId.systemDefault(); // Get the default time zone
+        Date date = Date.from(localDateTime.atZone(zoneId).toInstant());
+        return date;
+    }
+    
+     void broadcastListener(String message, String schedule){
+        String type = ddBroadType.getSelectedItem().toString();
+
+        if(type.equals("TO USERS IN DATABASE")){
+            try {
+                jda.broadcastToUsersInDb(message,schedule);
+                Object[] data ={message,type,schedule};
+                db.edit("INSERT INTO broadcast (messageBroadcast, sentTo, dateSent) VALUES(?,?,?)", data);
+            } catch (SQLException ex) {
+                Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else if(type.equals("TO GUILDS IN DATABASE")){
+            try {
+                jda.broadcastToAllGuild(message,schedule);
+                Object[] data ={message,type,schedule};
+                db.edit("INSERT INTO broadcast (messageBroadcast, sentTo, dateSent) VALUES(?,?,?)", data);
+            } catch (SQLException ex) {
+                Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else if(type.equals("TO SELECTED GUILD")){
+            String comboBox = (String) ddGuild.getSelectedItem();
+            String[] parts = comboBox.split("/");
+            String guildId = parts[1];
+ 
+            try {
+                jda.broadcastToGuild(guildId,message,schedule );
+                String sentTo = "TO GUILD "+parts[0] ; 
+                Object[] data ={message,sentTo,schedule};
+                db.edit("INSERT INTO broadcast (messageBroadcast, sentTo, dateSent) VALUES(?,?,?)", data);
+            } catch (SQLException ex) {
+                Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else if(type.equals("TO SELECTED GUILD'S MEMBER")){
+            String comboBox = (String) ddGuild.getSelectedItem();
+            String[] parts = comboBox.split("/");
+            String guildId = parts[1];
+
+            try {
+                jda.broadcastToGuildMembers(guildId,message,schedule);
+                String sentTo = "TO "+parts[0] +"GUILD MEMBER" ; 
+                Object[] data ={message,sentTo,schedule};
+                db.edit("INSERT INTO broadcast (messageBroadcast, sentTo, dateSent) VALUES(?,?,?)", data);
+            } catch (SQLException ex) {
+                Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        this.dataBroadcast();
+            
+    }
+     
+    private void menuMessageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuMessageMouseClicked
+       
+        selectionModel.setSelectedIndex(0);
+        panelMessage.setVisible(true);
+        panelBroadcast.setVisible(false);
+        
+    }//GEN-LAST:event_menuMessageMouseClicked
+
+    private void menuCommandMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuCommandMouseClicked
+        selectionModel.setSelectedIndex(0);
+    }//GEN-LAST:event_menuCommandMouseClicked
+
+    private void tblMessageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMessageMouseClicked
+        setFieldMessage();
+    }//GEN-LAST:event_tblMessageMouseClicked
+
+    private void txtMsgMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMsgMessageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMsgMessageActionPerformed
+
+    private void btnAddMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMessageActionPerformed
+        if(txtMsgMessage.getText().isBlank() || txtRespondMessage.getText().isBlank() ){
+            JOptionPane.showInternalMessageDialog(null, "Ada data yang masih kosong");
+        }
+        else{
+            Object[] checkUnique = {txtMsgMessage.getText()};
+            ResultSet resultSet = db.load("SELECT message FROM msg_respond WHERE message=?", checkUnique);
+            try {
+                if(!resultSet.next()){
+                    Object[] rowData = {txtMsgMessage.getText(),txtRespondMessage.getText() };
+                    db.edit("INSERT INTO msg_respond (message,respond) VALUES(?,?)", rowData);
+                    this.dataMessage();
+                }
+                else{
+                    JOptionPane.showInternalMessageDialog(panelMessage, "Message must be unique");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
+        }
+    }//GEN-LAST:event_btnAddMessageActionPerformed
+
+    private void btnDeleteMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteMessageActionPerformed
+        int row = tblMessage.getSelectedRow();
+
+        int id = (int)tblMessage.getValueAt(row,0);
+
+        Object[] data = {Integer.toString(id)};
+
+        db.edit("DELETE FROM msg_respond WHERE idMessage=?", data);
+        this.dataMessage();
+
+    }//GEN-LAST:event_btnDeleteMessageActionPerformed
+
+    private void btnUpdateMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateMessageActionPerformed
+        Object[] data = {txtMsgMessage.getText(),txtRespondMessage.getText(), txtIdMessage.getText()};
+
+        db.edit("UPDATE msg_respond SET message =?, respond=? WHERE idMessage=?", data);
+        this.dataMessage();
+
+    }//GEN-LAST:event_btnUpdateMessageActionPerformed
+
+    private void txtIdMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdMessageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdMessageActionPerformed
+
+    private void tblBroadcastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBroadcastMouseClicked
+
+    }//GEN-LAST:event_tblBroadcastMouseClicked
+
+    private void btnBroadcastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBroadcastActionPerformed
+        try{
+            String message = txtBroadcast.getText();
+            if(message==null || message.isEmpty()){
+                JOptionPane.showInternalMessageDialog(null, "Pesan Masih Kosong");
+
+            }else{
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                String now = currentDateTime.format(formatter);
+                broadcastListener(message,now);
+            }
+        }
+        catch(NullPointerException e){
+            JOptionPane.showInternalMessageDialog(null, "Data Masih Kosong");
+
+        }
+        catch(Exception E){
+            JOptionPane.showInternalMessageDialog(null, "Error yang lain");
+            System.out.println(E);
+        }
+    }//GEN-LAST:event_btnBroadcastActionPerformed
+
+    private void btnScheduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScheduleActionPerformed
+        try{
+            String message = txtBroadcast.getText();
+            if(message==null || message.isEmpty()){
+                JOptionPane.showInternalMessageDialog(null, "Pesan Masih Kosong");
+
+            }else{
+
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                Date raw = inputDate.getDate();
+                String date = formatter.format(raw);
+
+                int valueHour = ((Number) (inputHour.getValue())).intValue();
+
+                String hour = Integer.toString(valueHour);
+                if(valueHour < 10){
+                    hour = "0"+hour;
+                }
+
+                int valueMinute = ((Number) (inputMinute.getValue())).intValue();
+                String minute = Integer.toString(valueMinute);
+                if(valueMinute < 10){
+                    hour = "0"+minute;
+                }
+
+                String schedule = date +" "+hour+":"+minute ;
+                System.out.println(schedule);
+                broadcastListener(message,schedule);
+
+            }
+
+        }
+        catch(NullPointerException e){
+            JOptionPane.showInternalMessageDialog(null, "Data Masih Kosong");
+
+        }
+        catch(Exception E){
+            JOptionPane.showInternalMessageDialog(null, "Error yang lain");
+            System.out.println(E);
+        }
+    }//GEN-LAST:event_btnScheduleActionPerformed
+
+    private void menuBroadcastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuBroadcastMouseClicked
+        selectionModel.setSelectedIndex(2);
+        
+        panelBroadcast.setVisible(true);
+        panelMessage.setVisible(false);
+    }//GEN-LAST:event_menuBroadcastMouseClicked
+
+    private void menuUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUserMouseClicked
+        selectionModel.setSelectedIndex(3);
+    }//GEN-LAST:event_menuUserMouseClicked
+
+    private void menuGuildMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuGuildMouseClicked
+        selectionModel.setSelectedIndex(4);
+    }//GEN-LAST:event_menuGuildMouseClicked
+
+    private void menuLogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLogMouseClicked
+        selectionModel.setSelectedIndex(5);
+    }//GEN-LAST:event_menuLogMouseClicked
 
     /**
      * @param args the command line arguments
@@ -101,12 +755,54 @@ public class MainForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainForm().setVisible(true);
+                try {
+                    new MainForm().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton togelStart;
+    private javax.swing.JButton btnAddMessage;
+    private javax.swing.JButton btnBroadcast;
+    private javax.swing.JButton btnDeleteMessage;
+    private javax.swing.JButton btnSchedule;
+    private javax.swing.JButton btnUpdateMessage;
+    private javax.swing.JComboBox<String> ddBroadType;
+    private javax.swing.JComboBox<String> ddGuild;
+    private com.toedter.calendar.JDateChooser inputDate;
+    private javax.swing.JSpinner inputHour;
+    private javax.swing.JSpinner inputMinute;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel labelDate;
+    private javax.swing.JLabel labelDate1;
+    private javax.swing.JLabel labelDate2;
+    private javax.swing.JLabel labelMsgBroadcast;
+    private javax.swing.JLabel labelMsgMessage;
+    private javax.swing.JLabel labelRespondMessage;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu menuBroadcast;
+    private javax.swing.JMenu menuCommand;
+    private javax.swing.JMenu menuGuild;
+    private javax.swing.JMenu menuLog;
+    private javax.swing.JMenu menuMessage;
+    private javax.swing.JMenu menuUser;
+    private javax.swing.JPanel panelBroadcast;
+    private javax.swing.JPanel panelBroadcast1;
+    private javax.swing.JPanel panelBroadcast2;
+    private javax.swing.JPanel panelMessage;
+    private javax.swing.JScrollPane spBroadcast;
+    private javax.swing.JScrollPane spBrodcast1;
+    private javax.swing.JTable tblBroadcast;
+    private javax.swing.JTable tblMessage;
+    private javax.swing.JTextArea txtBroadcast;
+    private javax.swing.JTextField txtIdMessage;
+    private javax.swing.JTextField txtMsgMessage;
+    private javax.swing.JTextArea txtRespondMessage;
     // End of variables declaration//GEN-END:variables
 }

@@ -70,7 +70,7 @@ class Meme {
     
     String generateMeme() throws IOException, InterruptedException{
 
-        String responseString = responseString = memeAPI();     
+        String responseString = memeAPI();     
 
         List<String> randomData = getRandomData(responseString, 1); 
 

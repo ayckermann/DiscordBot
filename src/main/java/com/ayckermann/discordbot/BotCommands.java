@@ -1,6 +1,5 @@
 package com.ayckermann.discordbot;
 
-import com.mysql.cj.MessageBuilder;
 import java.awt.Color;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -23,9 +22,7 @@ import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.requests.RestAction;
 
 
 public class BotCommands extends ListenerAdapter{

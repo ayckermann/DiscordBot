@@ -48,9 +48,26 @@ public class MainForm extends javax.swing.JFrame {
         tblBroadcast.getColumnModel().getColumn(1).setMinWidth(150);
         tblBroadcast.getColumnModel().getColumn(2).setMinWidth(100);
         tblBroadcast.getColumnModel().getColumn(3).setMinWidth(80);
-        this.dataBroadcast();
-        this.loadGuild();
         
+        
+        //command
+        tblCommand.getColumnModel().getColumn(0).setMaxWidth(25);
+        tblCommand.getColumnModel().getColumn(1).setMinWidth(100);
+        tblCommand.getColumnModel().getColumn(2).setMinWidth(200);
+        txtIdCommand.setVisible(false);
+       
+        
+        //user
+        tblUser.getColumnModel().getColumn(0).setMinWidth(150);
+        tblUser.getColumnModel().getColumn(0).setMaxWidth(250);
+       
+        
+        tblGuild.getColumnModel().getColumn(0).setMinWidth(150);
+        tblGuild.getColumnModel().getColumn(0).setMaxWidth(250);
+        
+        
+        tblLog.getColumnModel().getColumn(0).setMaxWidth(25);
+       
     }
 
     /**
@@ -74,6 +91,19 @@ public class MainForm extends javax.swing.JFrame {
         btnDeleteMessage = new javax.swing.JButton();
         btnUpdateMessage = new javax.swing.JButton();
         txtIdMessage = new javax.swing.JTextField();
+        panelCommand = new javax.swing.JPanel();
+        txtIdCommand = new javax.swing.JTextField();
+        labelCommand = new javax.swing.JLabel();
+        txtCommand = new javax.swing.JTextField();
+        labelRespondCommand = new javax.swing.JLabel();
+        spSlash1 = new javax.swing.JScrollPane();
+        txtRespondCommand = new javax.swing.JTextArea();
+        spSlash2 = new javax.swing.JScrollPane();
+        tblCommand = new javax.swing.JTable();
+        labelPrefix = new javax.swing.JLabel();
+        txtPrefix = new javax.swing.JTextField();
+        btnDeleteCommand = new javax.swing.JButton();
+        btnUpdateCommand = new javax.swing.JButton();
         panelBroadcast = new javax.swing.JPanel();
         spBroadcast = new javax.swing.JScrollPane();
         tblBroadcast = new javax.swing.JTable();
@@ -90,6 +120,26 @@ public class MainForm extends javax.swing.JFrame {
         labelDate = new javax.swing.JLabel();
         labelDate1 = new javax.swing.JLabel();
         labelDate2 = new javax.swing.JLabel();
+        panelUser = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblUser = new javax.swing.JTable();
+        labelUser = new javax.swing.JLabel();
+        txtUserId = new javax.swing.JTextField();
+        labelUserId = new javax.swing.JLabel();
+        txtUsername = new javax.swing.JTextField();
+        btnDeleteUser = new javax.swing.JButton();
+        panelGuild = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tblGuild = new javax.swing.JTable();
+        labelUser1 = new javax.swing.JLabel();
+        txtGuildId = new javax.swing.JTextField();
+        labelUserId1 = new javax.swing.JLabel();
+        txtGuildname = new javax.swing.JTextField();
+        btnDeleteGuild = new javax.swing.JButton();
+        panelLog = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblLog = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuMessage = new javax.swing.JMenu();
         menuCommand = new javax.swing.JMenu();
@@ -101,6 +151,7 @@ public class MainForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Aya Bot Admin");
         setName("Aya Bot Admin"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(800, 470));
         setSize(new java.awt.Dimension(800, 450));
 
         tblMessage.setModel(new javax.swing.table.DefaultTableModel(
@@ -198,28 +249,29 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(txtIdMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(114, 114, 114))
                     .addGroup(panelMessageLayout.createSequentialGroup()
-                        .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(labelMsgMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(panelMessageLayout.createSequentialGroup()
-                                    .addComponent(btnAddMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(btnUpdateMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(panelMessageLayout.createSequentialGroup()
-                                    .addGap(243, 243, 243)
-                                    .addComponent(btnDeleteMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(txtMsgMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelMessageLayout.createSequentialGroup()
+                                        .addGap(121, 121, 121)
+                                        .addComponent(btnUpdateMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelMessageLayout.createSequentialGroup()
+                                        .addGap(243, 243, 243)
+                                        .addComponent(btnDeleteMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtMsgMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(labelMsgMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAddMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
-                .addGap(15, 15, 15))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelMessageLayout.setVerticalGroup(
             panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMessageLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
                     .addGroup(panelMessageLayout.createSequentialGroup()
                         .addComponent(labelMsgMessage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -235,8 +287,155 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(btnAddMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnUpdateMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 14, Short.MAX_VALUE)))
+                        .addGap(0, 37, Short.MAX_VALUE)))
                 .addContainerGap())
+        );
+
+        panelCommand.setPreferredSize(new java.awt.Dimension(800, 450));
+
+        txtIdCommand.setEditable(false);
+        txtIdCommand.setText("id");
+        txtIdCommand.setFocusable(false);
+        txtIdCommand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdCommandActionPerformed(evt);
+            }
+        });
+
+        labelCommand.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelCommand.setText("Command");
+
+        txtCommand.setEditable(false);
+        txtCommand.setEnabled(false);
+        txtCommand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCommandActionPerformed(evt);
+            }
+        });
+
+        labelRespondCommand.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelRespondCommand.setText("Respond");
+
+        txtRespondCommand.setColumns(20);
+        txtRespondCommand.setRows(5);
+        spSlash1.setViewportView(txtRespondCommand);
+
+        tblCommand.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Command", "Respond"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblCommand.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCommandMouseClicked(evt);
+            }
+        });
+        spSlash2.setViewportView(tblCommand);
+
+        labelPrefix.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelPrefix.setText("Prefix");
+
+        txtPrefix.setEditable(false);
+        txtPrefix.setForeground(new java.awt.Color(0, 0, 0));
+        txtPrefix.setText("/");
+        txtPrefix.setEnabled(false);
+        txtPrefix.setFocusable(false);
+        txtPrefix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrefixActionPerformed(evt);
+            }
+        });
+
+        btnDeleteCommand.setBackground(new java.awt.Color(153, 0, 0));
+        btnDeleteCommand.setForeground(new java.awt.Color(255, 255, 255));
+        btnDeleteCommand.setText("DELETE");
+        btnDeleteCommand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteCommandActionPerformed(evt);
+            }
+        });
+
+        btnUpdateCommand.setBackground(new java.awt.Color(153, 153, 0));
+        btnUpdateCommand.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdateCommand.setText("UPDATE");
+        btnUpdateCommand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateCommandActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelCommandLayout = new javax.swing.GroupLayout(panelCommand);
+        panelCommand.setLayout(panelCommandLayout);
+        panelCommandLayout.setHorizontalGroup(
+            panelCommandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCommandLayout.createSequentialGroup()
+                .addGroup(panelCommandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelCommandLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panelCommandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelCommandLayout.createSequentialGroup()
+                                .addComponent(labelPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(88, 88, 88)
+                                .addComponent(txtIdCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelRespondCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelCommand)
+                            .addComponent(spSlash1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelCommandLayout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(btnUpdateCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnDeleteCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(19, 19, 19)
+                .addComponent(spSlash2, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelCommandLayout.setVerticalGroup(
+            panelCommandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCommandLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelCommandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelCommandLayout.createSequentialGroup()
+                        .addGroup(panelCommandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labelPrefix)
+                            .addComponent(txtPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIdCommand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(labelCommand)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCommand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(labelRespondCommand)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(spSlash1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelCommandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDeleteCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUpdateCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29))
+                    .addGroup(panelCommandLayout.createSequentialGroup()
+                        .addComponent(spSlash2, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         tblBroadcast.setModel(new javax.swing.table.DefaultTableModel(
@@ -317,50 +516,48 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelMsgBroadcast, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelBroadcastLayout.createSequentialGroup()
-                        .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(spBrodcast1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelBroadcastLayout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(ddGuild, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(ddBroadType, 0, 345, Short.MAX_VALUE)))
-                            .addGroup(panelBroadcastLayout.createSequentialGroup()
-                                .addGap(19, 19, 19)
-                                .addComponent(btnBroadcast)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(labelDate, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(inputDate, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(panelBroadcastLayout.createSequentialGroup()
-                                            .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(inputHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(labelDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(labelDate2)
-                                                .addComponent(inputMinute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addComponent(btnSchedule))))
-                        .addGap(28, 28, 28)
-                        .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)))
+                    .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(spBrodcast1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelBroadcastLayout.createSequentialGroup()
+                            .addGap(4, 4, 4)
+                            .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(ddGuild, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ddBroadType, 0, 345, Short.MAX_VALUE)))
+                        .addGroup(panelBroadcastLayout.createSequentialGroup()
+                            .addGap(19, 19, 19)
+                            .addComponent(btnBroadcast)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(labelDate, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(inputDate, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(panelBroadcastLayout.createSequentialGroup()
+                                        .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(inputHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(labelDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(labelDate2)
+                                            .addComponent(inputMinute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btnSchedule)))))
+                .addGap(28, 28, 28)
+                .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelBroadcastLayout.setVerticalGroup(
             panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBroadcastLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(11, 11, 11)
                 .addComponent(labelMsgBroadcast)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
                     .addGroup(panelBroadcastLayout.createSequentialGroup()
                         .addComponent(spBrodcast1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(17, 17, 17)
                         .addComponent(ddBroadType, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21)
                         .addComponent(ddGuild, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                         .addComponent(labelDate)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(inputDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -376,7 +573,248 @@ public class MainForm extends javax.swing.JFrame {
                         .addGroup(panelBroadcastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnBroadcast, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSchedule, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)))
+                        .addGap(30, 30, 30))
+                    .addGroup(panelBroadcastLayout.createSequentialGroup()
+                        .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+                        .addGap(37, 37, 37))))
+        );
+
+        tblUser.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "User Id", "Username", "Display Name"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblUserMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblUser);
+
+        labelUser.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelUser.setText("Username");
+
+        txtUserId.setEditable(false);
+        txtUserId.setEnabled(false);
+
+        labelUserId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelUserId.setText("User Id");
+
+        txtUsername.setEditable(false);
+        txtUsername.setEnabled(false);
+
+        btnDeleteUser.setBackground(new java.awt.Color(153, 0, 0));
+        btnDeleteUser.setForeground(new java.awt.Color(255, 255, 255));
+        btnDeleteUser.setText("DELETE");
+        btnDeleteUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteUserActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelUserLayout = new javax.swing.GroupLayout(panelUser);
+        panelUser.setLayout(panelUserLayout);
+        panelUserLayout.setHorizontalGroup(
+            panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelUserLayout.createSequentialGroup()
+                .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelUserLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelUserId, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtUserId, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelUserLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelUser, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelUserLayout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(btnDeleteUser, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelUserLayout.setVerticalGroup(
+            panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelUserLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(panelUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelUserLayout.createSequentialGroup()
+                        .addComponent(labelUserId, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtUserId, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(labelUser, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnDeleteUser, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3))
+                .addContainerGap())
+        );
+
+        tblGuild.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Guild Id", "Guild Name", "Default Channel"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblGuild.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblGuildMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(tblGuild);
+
+        labelUser1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelUser1.setText("Guild Name");
+
+        txtGuildId.setEditable(false);
+        txtGuildId.setEnabled(false);
+
+        labelUserId1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelUserId1.setText("Guild Id");
+
+        txtGuildname.setEditable(false);
+        txtGuildname.setEnabled(false);
+
+        btnDeleteGuild.setBackground(new java.awt.Color(153, 0, 0));
+        btnDeleteGuild.setForeground(new java.awt.Color(255, 255, 255));
+        btnDeleteGuild.setText("DELETE");
+        btnDeleteGuild.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteGuildActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelGuildLayout = new javax.swing.GroupLayout(panelGuild);
+        panelGuild.setLayout(panelGuildLayout);
+        panelGuildLayout.setHorizontalGroup(
+            panelGuildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGuildLayout.createSequentialGroup()
+                .addGroup(panelGuildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelGuildLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(panelGuildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelUserId1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGuildId, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelGuildLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(panelGuildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtGuildname, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelGuildLayout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(btnDeleteGuild, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelGuildLayout.setVerticalGroup(
+            panelGuildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelGuildLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(panelGuildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelGuildLayout.createSequentialGroup()
+                        .addComponent(labelUserId1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtGuildId, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(labelUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtGuildname, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnDeleteGuild, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane5))
+                .addContainerGap())
+        );
+
+        tblLog.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Username", "Incoming", "Outgoing"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(tblLog);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel1.setText("Log");
+
+        javax.swing.GroupLayout panelLogLayout = new javax.swing.GroupLayout(panelLog);
+        panelLog.setLayout(panelLogLayout);
+        panelLogLayout.setHorizontalGroup(
+            panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
+                    .addGroup(panelLogLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        panelLogLayout.setVerticalGroup(
+            panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -441,12 +879,34 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(panelMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(panelBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelGuild, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelLog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(10, 10, 10)
+                    .addComponent(panelCommand, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(panelBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelGuild, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelLog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(10, 10, 10)
+                    .addComponent(panelCommand, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         pack();
@@ -468,8 +928,7 @@ public class MainForm extends javax.swing.JFrame {
                 tableModel.addRow(rowData);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(MessageForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            System.out.println(ex);        }
     }
     
     private void setFieldMessage(){
@@ -479,6 +938,46 @@ public class MainForm extends javax.swing.JFrame {
         txtMsgMessage.setText((String)tblMessage.getValueAt(row,1));
         txtRespondMessage.setText((String)tblMessage.getValueAt(row,2));
     }
+    
+     private void voidMessage(){
+        txtIdMessage.setText("");
+        txtMsgMessage.setText("");
+        txtRespondMessage.setText("");
+    }
+     
+    
+    void dataCommand(){
+        try {
+
+        ResultSet resultSet =  db.load("SELECT * FROM slash_command", null);
+        DefaultTableModel tableModel = (DefaultTableModel)tblCommand.getModel();
+        tableModel.setRowCount(0); //reset data
+
+        while (resultSet.next()) {
+            int id = resultSet.getInt("idSlash");
+            String command =  resultSet.getString("slashCommand");
+            String respond = resultSet.getString("respondSlash");
+
+            Object[] rowData = {id,command,respond};
+            tableModel.addRow(rowData);
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    private void setFieldCommand(){
+        int row = tblCommand.getSelectedRow();
+        String id = Integer.toString((int)tblCommand.getValueAt(row,0));
+        txtIdCommand.setText(id);
+        txtCommand.setText((String)tblCommand.getValueAt(row,1));
+        txtRespondCommand.setText((String)tblCommand.getValueAt(row,2));
+    }
+    private void voidCommand(){
+        txtIdCommand.setText("");
+        txtCommand.setText("");
+        txtRespondCommand.setText("");
+    }
+    
     void dataBroadcast(){
      try {
             ResultSet resultSet =  db.load("SELECT * FROM broadcast", null);
@@ -495,9 +994,10 @@ public class MainForm extends javax.swing.JFrame {
                 tableModel.addRow(rowData);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(MessageForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     void loadGuild() throws SQLException{
         ResultSet resultSet= db.load("SELECT * FROM guild", null);
         while (resultSet.next()) {            
@@ -505,6 +1005,9 @@ public class MainForm extends javax.swing.JFrame {
             String id = resultSet.getString("guildId");
             ddGuild.addItem(name + "/" +id);
         }
+    }
+    private void voidBroadcast(){
+        txtBroadcast.setText("");
     }
     
     Date date(){
@@ -525,7 +1028,7 @@ public class MainForm extends javax.swing.JFrame {
                 Object[] data ={message,type,schedule};
                 db.edit("INSERT INTO broadcast (messageBroadcast, sentTo, dateSent) VALUES(?,?,?)", data);
             } catch (SQLException ex) {
-                Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else if(type.equals("TO GUILDS IN DATABASE")){
@@ -534,7 +1037,7 @@ public class MainForm extends javax.swing.JFrame {
                 Object[] data ={message,type,schedule};
                 db.edit("INSERT INTO broadcast (messageBroadcast, sentTo, dateSent) VALUES(?,?,?)", data);
             } catch (SQLException ex) {
-                Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else if(type.equals("TO SELECTED GUILD")){
@@ -548,7 +1051,7 @@ public class MainForm extends javax.swing.JFrame {
                 Object[] data ={message,sentTo,schedule};
                 db.edit("INSERT INTO broadcast (messageBroadcast, sentTo, dateSent) VALUES(?,?,?)", data);
             } catch (SQLException ex) {
-                Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else if(type.equals("TO SELECTED GUILD'S MEMBER")){
@@ -562,23 +1065,118 @@ public class MainForm extends javax.swing.JFrame {
                 Object[] data ={message,sentTo,schedule};
                 db.edit("INSERT INTO broadcast (messageBroadcast, sentTo, dateSent) VALUES(?,?,?)", data);
             } catch (SQLException ex) {
-                Logger.getLogger(BroadcastForm.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         this.dataBroadcast();
             
     }
      
+    void dataUser(){
+        try {
+        ResultSet resultSet =  db.load("SELECT * FROM user", null);
+        DefaultTableModel tableModel = (DefaultTableModel)tblUser.getModel();
+        tableModel.setRowCount(0); //reset data
+
+        while (resultSet.next()) {
+            String id = resultSet.getString("userId");
+            String displayName =  resultSet.getString("displayName");
+            String username = resultSet.getString("username");
+
+            Object[] rowData = {id,username,displayName};
+            tableModel.addRow(rowData);
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void setFieldUser(){
+        int row = tblUser.getSelectedRow();
+
+        txtUserId.setText((String)tblUser.getValueAt(row,0));
+        txtUsername.setText((String)tblUser.getValueAt(row,1));
+    }
+    private void voidUser(){
+        txtUserId.setText("");
+        txtUsername.setText("");
+    }
+    
+    void dataGuild(){
+        try {
+        ResultSet resultSet =  db.load("SELECT * FROM guild", null);
+        DefaultTableModel tableModel = (DefaultTableModel)tblGuild.getModel();
+        tableModel.setRowCount(0); //reset data
+
+        while (resultSet.next()) {
+            String id = resultSet.getString("guildId");
+            String guildName =  resultSet.getString("guildName");
+            String defaultChannel = resultSet.getString("defaultChannel");
+
+            Object[] rowData = {id,guildName,defaultChannel};
+            tableModel.addRow(rowData);
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void setFieldGuild(){
+        int row = tblGuild.getSelectedRow();
+
+        txtGuildId.setText((String)tblGuild.getValueAt(row,0));
+        txtGuildname.setText((String)tblGuild.getValueAt(row,1));
+    }
+    private void voidGuuld(){
+        txtGuildId.setText("");
+        txtGuildname.setText("");
+    }
+    
+     void dataLog(){
+     try {
+            ResultSet resultSet =  db.load("SELECT * FROM log", null);
+            DefaultTableModel tableModel = (DefaultTableModel)tblLog.getModel();
+            tableModel.setRowCount(0); //reset data
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String username =  resultSet.getString("username");
+                String  incoming= resultSet.getString("incoming");
+                String outgoing = resultSet.getString("outgoing");
+
+                Object[] rowData = {id,username,incoming,outgoing};
+                tableModel.addRow(rowData);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     
     private void menuMessageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuMessageMouseClicked
        
         selectionModel.setSelectedIndex(0);
         panelMessage.setVisible(true);
+        
+        panelCommand.setVisible(false);
         panelBroadcast.setVisible(false);
+        panelUser.setVisible(false);
+        panelGuild.setVisible(false);
+        panelLog.setVisible(false);
+
+        
         
     }//GEN-LAST:event_menuMessageMouseClicked
 
     private void menuCommandMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuCommandMouseClicked
-        selectionModel.setSelectedIndex(0);
+        selectionModel.setSelectedIndex(1);
+        this.dataCommand();
+        panelCommand.setVisible(true);
+        
+        panelMessage.setVisible(false);
+        panelBroadcast.setVisible(false);
+        panelUser.setVisible(false);
+        panelGuild.setVisible(false);
+        panelLog.setVisible(false);
     }//GEN-LAST:event_menuCommandMouseClicked
 
     private void tblMessageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMessageMouseClicked
@@ -611,6 +1209,7 @@ public class MainForm extends javax.swing.JFrame {
 
 
         }
+        voidMessage();
     }//GEN-LAST:event_btnAddMessageActionPerformed
 
     private void btnDeleteMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteMessageActionPerformed
@@ -622,6 +1221,7 @@ public class MainForm extends javax.swing.JFrame {
 
         db.edit("DELETE FROM msg_respond WHERE idMessage=?", data);
         this.dataMessage();
+        voidMessage();
 
     }//GEN-LAST:event_btnDeleteMessageActionPerformed
 
@@ -630,6 +1230,7 @@ public class MainForm extends javax.swing.JFrame {
 
         db.edit("UPDATE msg_respond SET message =?, respond=? WHERE idMessage=?", data);
         this.dataMessage();
+        voidMessage();
 
     }//GEN-LAST:event_btnUpdateMessageActionPerformed
 
@@ -637,32 +1238,59 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdMessageActionPerformed
 
-    private void tblBroadcastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBroadcastMouseClicked
-
-    }//GEN-LAST:event_tblBroadcastMouseClicked
-
-    private void btnBroadcastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBroadcastActionPerformed
-        try{
-            String message = txtBroadcast.getText();
-            if(message==null || message.isEmpty()){
-                JOptionPane.showInternalMessageDialog(null, "Pesan Masih Kosong");
-
-            }else{
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-                LocalDateTime currentDateTime = LocalDateTime.now();
-                String now = currentDateTime.format(formatter);
-                broadcastListener(message,now);
-            }
+    private void menuBroadcastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuBroadcastMouseClicked
+        selectionModel.setSelectedIndex(2);
+        this.dataBroadcast();
+        try {
+            this.loadGuild();
+        } catch (SQLException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        catch(NullPointerException e){
-            JOptionPane.showInternalMessageDialog(null, "Data Masih Kosong");
+        panelBroadcast.setVisible(true);
+        
+        panelMessage.setVisible(false);
+        panelCommand.setVisible(false);
+        panelUser.setVisible(false);
+        panelGuild.setVisible(false);
+        panelLog.setVisible(false);
 
-        }
-        catch(Exception E){
-            JOptionPane.showInternalMessageDialog(null, "Error yang lain");
-            System.out.println(E);
-        }
-    }//GEN-LAST:event_btnBroadcastActionPerformed
+    }//GEN-LAST:event_menuBroadcastMouseClicked
+
+    private void menuUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUserMouseClicked
+        selectionModel.setSelectedIndex(3);
+        this.dataUser();
+        panelUser.setVisible(true);
+        
+        panelCommand.setVisible(false);
+        panelBroadcast.setVisible(false);
+        panelMessage.setVisible(false);
+        panelGuild.setVisible(false);
+        panelLog.setVisible(false);
+    }//GEN-LAST:event_menuUserMouseClicked
+
+    private void menuGuildMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuGuildMouseClicked
+        selectionModel.setSelectedIndex(4);
+        this.dataGuild();
+        panelGuild.setVisible(true);
+        
+        panelCommand.setVisible(false);
+        panelBroadcast.setVisible(false);
+        panelUser.setVisible(false);
+        panelMessage.setVisible(false);
+        panelLog.setVisible(false);
+    }//GEN-LAST:event_menuGuildMouseClicked
+
+    private void menuLogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLogMouseClicked
+        selectionModel.setSelectedIndex(5);
+        this.dataLog();
+        panelLog.setVisible(true);
+        
+        panelCommand.setVisible(false);
+        panelBroadcast.setVisible(false);
+        panelUser.setVisible(false);
+        panelGuild.setVisible(false);
+        panelMessage.setVisible(false);
+    }//GEN-LAST:event_menuLogMouseClicked
 
     private void btnScheduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScheduleActionPerformed
         try{
@@ -704,26 +1332,105 @@ public class MainForm extends javax.swing.JFrame {
             JOptionPane.showInternalMessageDialog(null, "Error yang lain");
             System.out.println(E);
         }
+        voidBroadcast();
     }//GEN-LAST:event_btnScheduleActionPerformed
 
-    private void menuBroadcastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuBroadcastMouseClicked
-        selectionModel.setSelectedIndex(2);
-        
-        panelBroadcast.setVisible(true);
-        panelMessage.setVisible(false);
-    }//GEN-LAST:event_menuBroadcastMouseClicked
+    private void btnBroadcastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBroadcastActionPerformed
+        try{
+            String message = txtBroadcast.getText();
+            if(message==null || message.isEmpty()){
+                JOptionPane.showInternalMessageDialog(null, "Pesan Masih Kosong");
 
-    private void menuUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUserMouseClicked
-        selectionModel.setSelectedIndex(3);
-    }//GEN-LAST:event_menuUserMouseClicked
+            }else{
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                String now = currentDateTime.format(formatter);
+                broadcastListener(message,now);
+            }
+        }
+        catch(NullPointerException e){
+            JOptionPane.showInternalMessageDialog(null, "Data Masih Kosong");
 
-    private void menuGuildMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuGuildMouseClicked
-        selectionModel.setSelectedIndex(4);
-    }//GEN-LAST:event_menuGuildMouseClicked
+        }
+        catch(Exception E){
+            JOptionPane.showInternalMessageDialog(null, "Error yang lain");
+            System.out.println(E);
+        }
+        voidBroadcast();
+    }//GEN-LAST:event_btnBroadcastActionPerformed
 
-    private void menuLogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLogMouseClicked
-        selectionModel.setSelectedIndex(5);
-    }//GEN-LAST:event_menuLogMouseClicked
+    private void tblBroadcastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBroadcastMouseClicked
+
+    }//GEN-LAST:event_tblBroadcastMouseClicked
+
+    private void txtIdCommandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdCommandActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdCommandActionPerformed
+
+    private void txtCommandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCommandActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCommandActionPerformed
+
+    private void tblCommandMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCommandMouseClicked
+        this.setFieldCommand();
+    }//GEN-LAST:event_tblCommandMouseClicked
+
+    private void txtPrefixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrefixActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrefixActionPerformed
+
+    private void btnDeleteCommandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCommandActionPerformed
+        int row = tblCommand.getSelectedRow();
+
+        int id = (int)tblCommand.getValueAt(row,0);
+
+        Object[] data = {Integer.toString(id)};
+
+        db.edit("DELETE FROM slash_command WHERE idSlash=?", data);
+        this.dataCommand();
+        this.voidCommand();
+    }//GEN-LAST:event_btnDeleteCommandActionPerformed
+
+    private void btnUpdateCommandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateCommandActionPerformed
+        Object[] data = {txtRespondCommand.getText(), txtIdCommand.getText()};
+
+        db.edit("UPDATE slash_command SET respondSlash=? WHERE idSlash=?", data);
+        this.dataCommand();
+        this.voidCommand();
+    }//GEN-LAST:event_btnUpdateCommandActionPerformed
+
+    private void tblUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserMouseClicked
+        this.setFieldUser();
+    }//GEN-LAST:event_tblUserMouseClicked
+
+    private void btnDeleteUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteUserActionPerformed
+        int row = tblUser.getSelectedRow();
+
+        String id = (String)tblUser.getValueAt(row,0);
+
+        Object[] data = {id};
+
+        db.edit("DELETE FROM user WHERE userId=?", data);
+        this.dataUser();
+        this.voidUser();
+
+    }//GEN-LAST:event_btnDeleteUserActionPerformed
+
+    private void tblGuildMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGuildMouseClicked
+        this.setFieldGuild();
+    }//GEN-LAST:event_tblGuildMouseClicked
+
+    private void btnDeleteGuildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteGuildActionPerformed
+        int row = tblGuild.getSelectedRow();
+
+        String id = (String)tblGuild.getValueAt(row,0);
+
+        Object[] data = {id};
+
+        db.edit("DELETE FROM guild WHERE guildId=?", data);
+        this.dataGuild();
+        this.voidGuuld();
+    }//GEN-LAST:event_btnDeleteGuildActionPerformed
 
     /**
      * @param args the command line arguments
@@ -767,24 +1474,37 @@ public class MainForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMessage;
     private javax.swing.JButton btnBroadcast;
+    private javax.swing.JButton btnDeleteCommand;
+    private javax.swing.JButton btnDeleteGuild;
     private javax.swing.JButton btnDeleteMessage;
+    private javax.swing.JButton btnDeleteUser;
     private javax.swing.JButton btnSchedule;
+    private javax.swing.JButton btnUpdateCommand;
     private javax.swing.JButton btnUpdateMessage;
     private javax.swing.JComboBox<String> ddBroadType;
     private javax.swing.JComboBox<String> ddGuild;
     private com.toedter.calendar.JDateChooser inputDate;
     private javax.swing.JSpinner inputHour;
     private javax.swing.JSpinner inputMinute;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JLabel labelCommand;
     private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelDate1;
     private javax.swing.JLabel labelDate2;
     private javax.swing.JLabel labelMsgBroadcast;
     private javax.swing.JLabel labelMsgMessage;
+    private javax.swing.JLabel labelPrefix;
+    private javax.swing.JLabel labelRespondCommand;
     private javax.swing.JLabel labelRespondMessage;
+    private javax.swing.JLabel labelUser;
+    private javax.swing.JLabel labelUser1;
+    private javax.swing.JLabel labelUserId;
+    private javax.swing.JLabel labelUserId1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuBroadcast;
     private javax.swing.JMenu menuCommand;
@@ -793,16 +1513,32 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuMessage;
     private javax.swing.JMenu menuUser;
     private javax.swing.JPanel panelBroadcast;
-    private javax.swing.JPanel panelBroadcast1;
-    private javax.swing.JPanel panelBroadcast2;
+    private javax.swing.JPanel panelCommand;
+    private javax.swing.JPanel panelGuild;
+    private javax.swing.JPanel panelLog;
     private javax.swing.JPanel panelMessage;
+    private javax.swing.JPanel panelUser;
     private javax.swing.JScrollPane spBroadcast;
     private javax.swing.JScrollPane spBrodcast1;
+    private javax.swing.JScrollPane spSlash1;
+    private javax.swing.JScrollPane spSlash2;
     private javax.swing.JTable tblBroadcast;
+    private javax.swing.JTable tblCommand;
+    private javax.swing.JTable tblGuild;
+    private javax.swing.JTable tblLog;
     private javax.swing.JTable tblMessage;
+    private javax.swing.JTable tblUser;
     private javax.swing.JTextArea txtBroadcast;
+    private javax.swing.JTextField txtCommand;
+    private javax.swing.JTextField txtGuildId;
+    private javax.swing.JTextField txtGuildname;
+    private javax.swing.JTextField txtIdCommand;
     private javax.swing.JTextField txtIdMessage;
     private javax.swing.JTextField txtMsgMessage;
+    private javax.swing.JTextField txtPrefix;
+    private javax.swing.JTextArea txtRespondCommand;
     private javax.swing.JTextArea txtRespondMessage;
+    private javax.swing.JTextField txtUserId;
+    private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

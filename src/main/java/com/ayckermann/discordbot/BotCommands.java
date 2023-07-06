@@ -244,13 +244,27 @@ public class BotCommands extends ListenerAdapter{
 
                     if(!response.equals("")){
                         channel.sendMessage(response).queue(); 
-                        Object[] log = {event.getAuthor().getName(),message,response};
-                        db.edit("INSERT INTO log (username,incoming,outgoing)"
-                                + "VALUES(?,?,?)",log ); 
+                        
+                        Object[] log = {event.getAuthor().getId(),event.getAuthor().getName(),message,response};
+                        db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                                + "VALUES(?,?,?,?)",log ); 
+                    }else{
+                        response="Sorry I can't answer that message";
+                        channel.sendMessage(response).queue(); 
+                        
+                        Object[] log = {event.getAuthor().getId(),event.getAuthor().getName(),message,response};
+                        db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                                + "VALUES(?,?,?,?)",log ); 
                     }
+                    
+                    
                     if(content.equals(mention)){
                         String mentionedUser = event.getMessage().getAuthor().getAsMention();
                         channel.sendMessage("Gimana ?" + mentionedUser).queue(); 
+                        
+                        Object[] log = {event.getAuthor().getId(),event.getAuthor().getName(),"@Aya Bot", "Gimana ?" + mentionedUser};
+                        db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                                + "VALUES(?,?,?,?)",log );
                     }
 
                 }
@@ -272,9 +286,17 @@ public class BotCommands extends ListenerAdapter{
 
                 if(!response.equals("")){
                     channel.sendMessage(response).queue(); 
-                    Object[] log = {event.getAuthor().getName(),message,response};
-                    db.edit("INSERT INTO log (username,incoming,outgoing)"
-                            + "VALUES(?,?,?)",log );
+                    Object[] log = {event.getAuthor().getId(),event.getAuthor().getName(),message,response};
+                    db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                            + "VALUES(?,?,?,?)",log );
+                }
+                else{
+                    response="Sorry I can't answer that message";
+                    channel.sendMessage(response).queue(); 
+
+                    Object[] log = {event.getAuthor().getId(), event.getAuthor().getName(), message, response};
+                    db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                            + "VALUES(?,?,?,?)",log ); 
                 }
 
             }
@@ -306,28 +328,13 @@ public class BotCommands extends ListenerAdapter{
                 }
 
                 String[] joke = {};
-                try {
-                    if(type.isEmpty()){
-                        type = "";
-                    }
-                    joke = new Joke().generateJoke(type);     
-
-                } catch (IOException ex) {
-                    event.getHook().sendMessage("Joke tidak ditemukan").queue();
-                    
-                    Object[] log = {event.getUser().getName(),"/joke "+type,"Joke tidak ditemukan"};
-                    db.edit("INSERT INTO log (username,incoming,outgoing)"
-                            + "VALUES(?,?,?)",log );
-                    
-                    System.out.println(ex);
-                } catch (InterruptedException ex) {
-                    event.getHook().sendMessage("Joke tidak ditemukan").queue();
-
-                    Object[] log = {event.getUser().getName(),"/joke "+type,"Joke tidak ditemukan"};
-                    db.edit("INSERT INTO log (username,incoming,outgoing)"
-                            + "VALUES(?,?,?)",log );
-                    System.out.println(ex);
+     
+                if(type.isEmpty()){
+                    type = "";
                 }
+                joke = new Joke().generateJoke(type);     
+
+     
 
                 if(joke != null){
                     event.getHook().sendMessage(joke[0]).queue();
@@ -341,15 +348,15 @@ public class BotCommands extends ListenerAdapter{
                        }
                     }, 5000);  
                     
-                    Object[] log = {event.getUser().getName(),"/joke "+type,joke[0]+"\n"+joke[1]};
-                    db.edit("INSERT INTO log (username,incoming,outgoing)"
-                            + "VALUES(?,?,?)",log );
+                    Object[] log = {event.getUser().getId(),event.getUser().getName(),"/joke "+type,joke[0]+"\n"+joke[1]};
+                    db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                            + "VALUES(?,?,?,?)",log ); 
                 } 
                 else{
                     event.getHook().sendMessage("Joke tidak ditemukan").queue();
-                    Object[] log = {event.getUser().getName(),"/joke "+type,"Joke tidak ditemukan"};
-                    db.edit("INSERT INTO log (username,incoming,outgoing)"
-                            + "VALUES(?,?,?)",log );
+                    Object[] log = {event.getUser().getId(),event.getUser().getName(),"/joke "+type,"Joke tidak ditemukan"};
+                    db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                            + "VALUES(?,?,?,?)",log ); 
                 }  
             }
 
@@ -369,9 +376,10 @@ public class BotCommands extends ListenerAdapter{
                 eb.setColor(Color.CYAN);
                 eb.setImage(meme);
                 event.getHook().sendMessageEmbeds(eb.build()).queue();
-                Object[] log = {event.getUser().getName(),"/meme",meme};
-                    db.edit("INSERT INTO log (username,incoming,outgoing)"
-                            + "VALUES(?,?,?)",log );
+                
+                Object[] log = {event.getUser().getId(),event.getUser().getName(),"/meme",meme};
+                db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                        + "VALUES(?,?,?,?)",log );
                  
             }
 
@@ -402,9 +410,9 @@ public class BotCommands extends ListenerAdapter{
                         event.getHook().sendMessage(message + "\n" + part1).queue();
                         event.getChannel().sendMessage("... "+part2).queue();
                     }  
-                    Object[] log = {event.getUser().getName(),message,response};
-                    db.edit("INSERT INTO log (username,incoming,outgoing)"
-                            + "VALUES(?,?,?)",log );
+                    Object[] log = {event.getUser().getId(),event.getUser().getName(),message,response};
+                    db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                            + "VALUES(?,?,?,?)",log );
                 }
                 else{
                     try {
@@ -427,16 +435,16 @@ public class BotCommands extends ListenerAdapter{
                         db.edit("INSERT INTO slash_command (slashCommand,respondSlash)"
                                 + "VALUES(?,?)",data2 );
                         
-                        Object[] log = {event.getUser().getName(),message,response};
-                        db.edit("INSERT INTO log (username,incoming,outgoing)"
-                                + "VALUES(?,?,?)",log );
+                        Object[] log = {event.getUser().getId(),event.getUser().getName(),message,response};
+                        db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                              + "VALUES(?,?,?,?)",log );
                     } catch (IOException ex) {
                         System.out.println("ex");
                         response = "gpt error";
                         event.getHook().sendMessage(message + "\n" + response).queue();
-                        Object[] log = {event.getUser().getName(),message,response};
-                        db.edit("INSERT INTO log (username,incoming,outgoing)"
-                                + "VALUES(?,?,?)",log );
+                        Object[] log = {event.getUser().getId(),event.getUser().getName(),message,response};
+                        db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                              + "VALUES(?,?,?,?)",log );
                     }
                 }
             }
@@ -510,9 +518,9 @@ public class BotCommands extends ListenerAdapter{
                 
                 event.getHook().sendMessage(response).queue();
                 
-                Object[] log = {event.getUser().getName(),"/help",response};
-                db.edit("INSERT INTO log (username,incoming,outgoing)"
-                                + "VALUES(?,?,?)",log );
+                Object[] log = {event.getUser().getId(),event.getUser().getName(),"/help",response};
+                db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
+                  + "VALUES(?,?,?,?)",log );
             }
 
         }

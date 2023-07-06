@@ -9,6 +9,8 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,25 +31,36 @@ public class Joke {
         return response.body();
     }
 
-    public String[] generateJoke(String type) throws IOException, InterruptedException{
-
-        String responseString =  jokeAPI(type);     
-        JSONObject responseJson = new JSONObject(responseString);
-        
+    public String[] generateJoke(String type){
         String[] joke = new String[2];
-        
-        if(responseJson.getBoolean("error") == true){
-            joke = null;   
-        }
-        else{
-           String setup = responseJson.getString("setup");
-           String delivery = responseJson.getString("delivery");
-           joke[0] =setup;
-           joke[1] = delivery;
+        try {
+            String responseString =  jokeAPI(type);
+            JSONObject responseJson = new JSONObject(responseString);
+            
+            joke = new String[2];
+            
+            if(responseJson.getBoolean("error") == true){
+                joke = null;
+            }else if(!responseJson.has("setup") ||!responseJson.has("delivery") ){
+            joke = null;
+            }
+            else{
+                String setup = responseJson.getString("setup");
+                String delivery = responseJson.getString("delivery");
+                joke[0] =setup;
+                joke[1] = delivery;
                 
-        }
+            }
+            
 
-        
+         
+        } catch (IOException ex) {
+             joke = null;
+            Logger.getLogger(Joke.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+             joke = null;
+            Logger.getLogger(Joke.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return joke;
     }
 }

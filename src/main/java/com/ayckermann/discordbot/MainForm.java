@@ -4,7 +4,7 @@
  */
 package com.ayckermann.discordbot;
 
-import java.awt.Component;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -12,13 +12,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultSingleSelectionModel;
 import javax.swing.JOptionPane;
 import javax.swing.SingleSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import net.dv8tion.jda.api.JDA;
 
 /**
  *
@@ -34,7 +35,12 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() throws SQLException {
         initComponents();
         menuBar.setSelectionModel(selectionModel);
+        panelCommand.setVisible(false);
         panelBroadcast.setVisible(false);
+        panelUser.setVisible(false);
+        panelGuild.setVisible(false);
+        panelLog.setVisible(false);
+        panelAdmin.setVisible(false);
         
         //Message
         tblMessage.getColumnModel().getColumn(0).setMaxWidth(25);
@@ -61,13 +67,19 @@ public class MainForm extends javax.swing.JFrame {
         tblUser.getColumnModel().getColumn(0).setMinWidth(150);
         tblUser.getColumnModel().getColumn(0).setMaxWidth(250);
        
-        
+        //guild
         tblGuild.getColumnModel().getColumn(0).setMinWidth(150);
         tblGuild.getColumnModel().getColumn(0).setMaxWidth(250);
         
-        
+        //log
         tblLog.getColumnModel().getColumn(0).setMaxWidth(25);
-       
+        dateFromLog.setDateFormatString("yyyy-MM-dd");
+        dateToLog.setDateFormatString("yyyy-MM-dd");
+        
+        //admin
+        tblAdmin.getColumnModel().getColumn(0).setMaxWidth(25);
+        txtIdAdmin.setVisible(false);
+
     }
 
     /**
@@ -140,6 +152,22 @@ public class MainForm extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tblLog = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        dateFromLog = new com.toedter.calendar.JDateChooser();
+        btnSearchLog = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        dateToLog = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
+        panelAdmin = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblAdmin = new javax.swing.JTable();
+        txtAdminname = new javax.swing.JTextField();
+        btnAddAdmin = new javax.swing.JButton();
+        labelMsgMessage1 = new javax.swing.JLabel();
+        labelRespondMessage1 = new javax.swing.JLabel();
+        btnDeleteAdmin = new javax.swing.JButton();
+        btnUpdateAdmin = new javax.swing.JButton();
+        txtIdAdmin = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JTextField();
         menuBar = new javax.swing.JMenuBar();
         menuMessage = new javax.swing.JMenu();
         menuCommand = new javax.swing.JMenu();
@@ -147,12 +175,18 @@ public class MainForm extends javax.swing.JFrame {
         menuUser = new javax.swing.JMenu();
         menuGuild = new javax.swing.JMenu();
         menuLog = new javax.swing.JMenu();
+        menuAdmin = new javax.swing.JMenu();
+        listAdmin = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        listLogout = new javax.swing.JMenuItem();
+        listExit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Aya Bot Admin");
         setName("Aya Bot Admin"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(800, 470));
         setSize(new java.awt.Dimension(800, 450));
+
+        panelMessage.setBackground(new java.awt.Color(204, 255, 255));
 
         tblMessage.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -263,7 +297,7 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(labelMsgMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAddMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelMessageLayout.setVerticalGroup(
@@ -271,7 +305,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(panelMessageLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                     .addGroup(panelMessageLayout.createSequentialGroup()
                         .addComponent(labelMsgMessage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -287,10 +321,11 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(btnAddMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnUpdateMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 37, Short.MAX_VALUE)))
+                        .addGap(0, 49, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
+        panelCommand.setBackground(new java.awt.Color(204, 255, 255));
         panelCommand.setPreferredSize(new java.awt.Dimension(800, 450));
 
         txtIdCommand.setEditable(false);
@@ -407,7 +442,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addGap(40, 40, 40)
                         .addComponent(btnDeleteCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(19, 19, 19)
-                .addComponent(spSlash2, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
+                .addComponent(spSlash2, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelCommandLayout.setVerticalGroup(
@@ -434,9 +469,11 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(btnUpdateCommand, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(29, 29, 29))
                     .addGroup(panelCommandLayout.createSequentialGroup()
-                        .addComponent(spSlash2, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                        .addComponent(spSlash2, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                         .addContainerGap())))
         );
+
+        panelBroadcast.setBackground(new java.awt.Color(204, 255, 255));
 
         tblBroadcast.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -541,7 +578,7 @@ public class MainForm extends javax.swing.JFrame {
                                             .addComponent(inputMinute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addComponent(btnSchedule)))))
                 .addGap(28, 28, 28)
-                .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelBroadcastLayout.setVerticalGroup(
@@ -557,7 +594,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(ddBroadType, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21)
                         .addComponent(ddGuild, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                         .addComponent(labelDate)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(inputDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -575,9 +612,11 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(btnSchedule, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30))
                     .addGroup(panelBroadcastLayout.createSequentialGroup()
-                        .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+                        .addComponent(spBroadcast, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
                         .addGap(37, 37, 37))))
         );
+
+        panelUser.setBackground(new java.awt.Color(204, 255, 255));
 
         tblUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -650,7 +689,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addGap(77, 77, 77)
                         .addComponent(btnDeleteUser, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelUserLayout.setVerticalGroup(
@@ -672,6 +711,8 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jScrollPane3))
                 .addContainerGap())
         );
+
+        panelGuild.setBackground(new java.awt.Color(204, 255, 255));
 
         tblGuild.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -744,7 +785,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addGap(77, 77, 77)
                         .addComponent(btnDeleteGuild, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelGuildLayout.setVerticalGroup(
@@ -767,19 +808,21 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        panelLog.setBackground(new java.awt.Color(204, 255, 255));
+
         tblLog.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Id", "Username", "Incoming", "Outgoing"
+                "Id", "Username", "Incoming", "Outgoing", "Date"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -795,6 +838,19 @@ public class MainForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Log");
 
+        btnSearchLog.setBackground(new java.awt.Color(153, 153, 0));
+        btnSearchLog.setText("SEARCH");
+        btnSearchLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchLogActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Filter from :");
+        jLabel2.setAlignmentX(0.5F);
+
+        jLabel3.setText("To :");
+
         javax.swing.GroupLayout panelLogLayout = new javax.swing.GroupLayout(panelLog);
         panelLog.setLayout(panelLogLayout);
         panelLogLayout.setHorizontalGroup(
@@ -802,19 +858,175 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(panelLogLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
                     .addGroup(panelLogLayout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dateFromLog, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dateToLog, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnSearchLog, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelLogLayout.setVerticalGroup(
             panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dateFromLog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dateToLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSearchLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        panelAdmin.setBackground(new java.awt.Color(204, 255, 255));
+
+        tblAdmin.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Username", "Password"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAdminMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tblAdmin);
+
+        txtAdminname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAdminnameActionPerformed(evt);
+            }
+        });
+
+        btnAddAdmin.setBackground(new java.awt.Color(0, 102, 0));
+        btnAddAdmin.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddAdmin.setText("ADD");
+        btnAddAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddAdminActionPerformed(evt);
+            }
+        });
+
+        labelMsgMessage1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelMsgMessage1.setText("Username");
+
+        labelRespondMessage1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelRespondMessage1.setText("Password");
+
+        btnDeleteAdmin.setBackground(new java.awt.Color(153, 0, 0));
+        btnDeleteAdmin.setForeground(new java.awt.Color(255, 255, 255));
+        btnDeleteAdmin.setText("DELETE");
+        btnDeleteAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteAdminActionPerformed(evt);
+            }
+        });
+
+        btnUpdateAdmin.setBackground(new java.awt.Color(153, 153, 0));
+        btnUpdateAdmin.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdateAdmin.setText("UPDATE");
+        btnUpdateAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateAdminActionPerformed(evt);
+            }
+        });
+
+        txtIdAdmin.setEditable(false);
+        txtIdAdmin.setText("id");
+        txtIdAdmin.setFocusable(false);
+        txtIdAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdAdminActionPerformed(evt);
+            }
+        });
+
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPasswordActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelAdminLayout = new javax.swing.GroupLayout(panelAdmin);
+        panelAdmin.setLayout(panelAdminLayout);
+        panelAdminLayout.setHorizontalGroup(
+            panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAdminLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelAdminLayout.createSequentialGroup()
+                        .addComponent(labelRespondMessage1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtIdAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(114, 114, 114))
+                    .addGroup(panelAdminLayout.createSequentialGroup()
+                        .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtAdminname, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnAddAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelAdminLayout.createSequentialGroup()
+                                    .addGap(121, 121, 121)
+                                    .addComponent(btnUpdateAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(panelAdminLayout.createSequentialGroup()
+                                    .addGap(243, 243, 243)
+                                    .addComponent(btnDeleteAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(labelMsgMessage1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelAdminLayout.setVerticalGroup(
+            panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAdminLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+                    .addGroup(panelAdminLayout.createSequentialGroup()
+                        .addComponent(labelMsgMessage1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtAdminname, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtIdAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelRespondMessage1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(209, 209, 209)
+                        .addGroup(panelAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAddAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUpdateAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -869,6 +1081,35 @@ public class MainForm extends javax.swing.JFrame {
         });
         menuBar.add(menuLog);
 
+        menuAdmin.setText("Admin");
+
+        listAdmin.setText("Admin");
+        listAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listAdminActionPerformed(evt);
+            }
+        });
+        menuAdmin.add(listAdmin);
+        menuAdmin.add(jSeparator1);
+
+        listLogout.setText("Log Out");
+        listLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listLogoutActionPerformed(evt);
+            }
+        });
+        menuAdmin.add(listLogout);
+
+        listExit.setText("Exit");
+        listExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listExitActionPerformed(evt);
+            }
+        });
+        menuAdmin.add(listExit);
+
+        menuBar.add(menuAdmin);
+
         setJMenuBar(menuBar);
         menuBar.getAccessibleContext().setAccessibleParent(menuMessage);
 
@@ -886,10 +1127,9 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(panelLog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(10, 10, 10)
-                    .addComponent(panelCommand, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
-                    .addContainerGap()))
+                .addComponent(panelCommand, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -903,10 +1143,9 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(panelLog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(10, 10, 10)
-                    .addComponent(panelCommand, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
-                    .addContainerGap()))
+                .addComponent(panelCommand, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -1132,26 +1371,85 @@ public class MainForm extends javax.swing.JFrame {
         txtGuildname.setText("");
     }
     
-     void dataLog(){
-     try {
-            ResultSet resultSet =  db.load("SELECT * FROM log", null);
+    void dataLog(){
+        try {
+            ResultSet resultSet =  db.load("SELECT * FROM log ORDER BY id DESC", null);
             DefaultTableModel tableModel = (DefaultTableModel)tblLog.getModel();
             tableModel.setRowCount(0); //reset data
             
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String username =  resultSet.getString("username");
-                String  incoming= resultSet.getString("incoming");
+                String incoming= resultSet.getString("incoming");
                 String outgoing = resultSet.getString("outgoing");
+                String date = resultSet.getString("date");
 
-                Object[] rowData = {id,username,incoming,outgoing};
+                Object[] rowData = {id,username,incoming,outgoing,date};
                 tableModel.addRow(rowData);
             }
         } catch (SQLException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     
+    void filterLog(){
+        DefaultTableModel tableModel = (DefaultTableModel)tblLog.getModel();
+        tableModel.setRowCount(0); //reset data
+        SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        inputFormat.setTimeZone(TimeZone.getTimeZone("WIB"));
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
+        Date dateFrom = dateFromLog.getDate();
+        Date dateTo = dateToLog.getDate();
+        String stringFrom = outputFormat.format(dateFrom);
+        String stringTo = outputFormat.format(dateTo);
+   
+        try {
+                ResultSet resultSet =  db.load("SELECT * FROM log WHERE date(date)>=" + "date('"+ stringFrom+"') and date(date)<=" + "date('"+ stringTo+"')" , null);
+            
+                while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String username =  resultSet.getString("username");
+                String incoming= resultSet.getString("incoming");
+                String outgoing = resultSet.getString("outgoing");
+                String date = resultSet.getString("date");
+
+                Object[] rowData = {id,username,incoming,outgoing,date};
+                tableModel.addRow(rowData);
+            }
+        }
+        catch (SQLException e) {
+        }
+    }
+    public void dataAdmin(){
+
+        try {
+            ResultSet resultSet =  db.load("SELECT * FROM admin", null);
+            DefaultTableModel tableModel = (DefaultTableModel)tblAdmin.getModel();
+            tableModel.setRowCount(0); //reset data
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("idAdmin");
+                String message =  resultSet.getString("adminname");
+                String respond = resultSet.getString("password");
+
+                Object[] rowData = {id,message,respond};
+                tableModel.addRow(rowData);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);        }
+    }
+    private void setFieldAdmin(){
+        int row = tblAdmin.getSelectedRow();
+        String id = Integer.toString((int)tblAdmin.getValueAt(row,0));
+        txtIdAdmin.setText(id);
+        txtAdminname.setText((String)tblAdmin.getValueAt(row,1));
+        txtPassword.setText((String)tblAdmin.getValueAt(row,2));
+    }
+     private void voidAdmin(){
+        txtAdminname.setText("");
+        txtPassword.setText("");
+    }
+        
     private void menuMessageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuMessageMouseClicked
        
         selectionModel.setSelectedIndex(0);
@@ -1162,6 +1460,7 @@ public class MainForm extends javax.swing.JFrame {
         panelUser.setVisible(false);
         panelGuild.setVisible(false);
         panelLog.setVisible(false);
+        panelAdmin.setVisible(false);
 
         
         
@@ -1177,6 +1476,7 @@ public class MainForm extends javax.swing.JFrame {
         panelUser.setVisible(false);
         panelGuild.setVisible(false);
         panelLog.setVisible(false);
+        panelAdmin.setVisible(false);
     }//GEN-LAST:event_menuCommandMouseClicked
 
     private void tblMessageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMessageMouseClicked
@@ -1201,10 +1501,10 @@ public class MainForm extends javax.swing.JFrame {
                     this.dataMessage();
                 }
                 else{
-                    JOptionPane.showInternalMessageDialog(panelMessage, "Message must be unique");
+                    JOptionPane.showInternalMessageDialog(null, "Message must be unique");
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showInternalMessageDialog(null, "SQL error, try see the form");
             }
 
 
@@ -1226,11 +1526,44 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteMessageActionPerformed
 
     private void btnUpdateMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateMessageActionPerformed
-        Object[] data = {txtMsgMessage.getText(),txtRespondMessage.getText(), txtIdMessage.getText()};
+        
+        if(txtMsgMessage.getText().isBlank() || txtRespondMessage.getText().isBlank() ){
+            JOptionPane.showInternalMessageDialog(null, "Ada data yang masih kosong");
+        }
+        else{
+            Object[] checkUnique = {txtMsgMessage.getText()};
+            ResultSet resultSet = db.load("SELECT message FROM msg_respond WHERE message=?", checkUnique);
+            try {
+                int counter= 0;
+                
+                while (resultSet.next()) {
+                    counter++;
+                    
+                }
+                if(counter == 1){
+                    Object[] rowData = {txtMsgMessage.getText(),txtRespondMessage.getText(), txtIdMessage.getText()};
 
-        db.edit("UPDATE msg_respond SET message =?, respond=? WHERE idMessage=?", data);
-        this.dataMessage();
+                    PreparedStatement preparedStmt = db.connection.prepareStatement("UPDATE msg_respond SET message =?, respond=? WHERE idMessage=?");            
+                    
+                    preparedStmt.setString (1, rowData[0].toString());
+                    preparedStmt.setString (2, rowData[1].toString());
+                    preparedStmt.setString (3, rowData[2].toString());
+                    preparedStmt.executeUpdate();
+                    
+                    this.dataMessage();        
+                }
+                else{
+                    JOptionPane.showInternalMessageDialog(null, "Message must be unique");
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showInternalMessageDialog(null, "SQL error, Message might not unique");
+            }
+
+
+
+        }
         voidMessage();
+        
 
     }//GEN-LAST:event_btnUpdateMessageActionPerformed
 
@@ -1266,6 +1599,7 @@ public class MainForm extends javax.swing.JFrame {
         panelMessage.setVisible(false);
         panelGuild.setVisible(false);
         panelLog.setVisible(false);
+        panelAdmin.setVisible(false);
     }//GEN-LAST:event_menuUserMouseClicked
 
     private void menuGuildMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuGuildMouseClicked
@@ -1278,6 +1612,7 @@ public class MainForm extends javax.swing.JFrame {
         panelUser.setVisible(false);
         panelMessage.setVisible(false);
         panelLog.setVisible(false);
+        panelAdmin.setVisible(false);
     }//GEN-LAST:event_menuGuildMouseClicked
 
     private void menuLogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLogMouseClicked
@@ -1290,6 +1625,7 @@ public class MainForm extends javax.swing.JFrame {
         panelUser.setVisible(false);
         panelGuild.setVisible(false);
         panelMessage.setVisible(false);
+        panelAdmin.setVisible(false);
     }//GEN-LAST:event_menuLogMouseClicked
 
     private void btnScheduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScheduleActionPerformed
@@ -1314,7 +1650,7 @@ public class MainForm extends javax.swing.JFrame {
                 int valueMinute = ((Number) (inputMinute.getValue())).intValue();
                 String minute = Integer.toString(valueMinute);
                 if(valueMinute < 10){
-                    hour = "0"+minute;
+                    minute = "0"+minute;
                 }
 
                 String schedule = date +" "+hour+":"+minute ;
@@ -1432,6 +1768,144 @@ public class MainForm extends javax.swing.JFrame {
         this.voidGuuld();
     }//GEN-LAST:event_btnDeleteGuildActionPerformed
 
+    private void listAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listAdminActionPerformed
+        selectionModel.setSelectedIndex(6);
+        this.dataAdmin();
+        panelAdmin.setVisible(true);
+ 
+        
+        panelCommand.setVisible(false);
+        panelBroadcast.setVisible(false);
+        panelUser.setVisible(false);
+        panelGuild.setVisible(false);
+        panelMessage.setVisible(false);
+        panelLog.setVisible(false);
+    }//GEN-LAST:event_listAdminActionPerformed
+
+    private void tblAdminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAdminMouseClicked
+        this.setFieldAdmin();
+    }//GEN-LAST:event_tblAdminMouseClicked
+
+    private void txtAdminnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAdminnameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAdminnameActionPerformed
+
+    private void btnAddAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAdminActionPerformed
+        if(txtAdminname.getText().isBlank() || txtPassword.getText().isBlank() ){
+            JOptionPane.showInternalMessageDialog(null, "Ada data yang masih kosong");
+        }
+        else{
+            Object[] checkUnique = {txtAdminname.getText()};
+            ResultSet resultSet = db.load("SELECT adminname FROM admin WHERE adminname=?", checkUnique);
+            try {
+                if(!resultSet.next()){
+                    Object[] rowData = {txtAdminname.getText(),txtPassword.getText() };
+                    db.edit("INSERT INTO admin (adminname,password) VALUES(?,?)", rowData);
+                    this.dataAdmin();
+                }
+                else{
+                    JOptionPane.showInternalMessageDialog(null, "Username must be unique");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
+        }
+        voidAdmin();
+        
+        
+    }//GEN-LAST:event_btnAddAdminActionPerformed
+
+    private void btnDeleteAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteAdminActionPerformed
+        int row = tblAdmin.getSelectedRow();
+
+        int id = (int)tblAdmin.getValueAt(row,0);
+
+        Object[] data = {Integer.toString(id)};
+
+        db.edit("DELETE FROM admin WHERE idAdmin=?", data);
+        this.dataAdmin();
+        voidAdmin();
+    }//GEN-LAST:event_btnDeleteAdminActionPerformed
+
+    private void btnUpdateAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateAdminActionPerformed
+     if(txtAdminname.getText().isBlank() || txtPassword.getText().isBlank() ){
+            JOptionPane.showInternalMessageDialog(null, "Ada data yang masih kosong");
+        }
+        else{
+            Object[] checkUnique = {txtAdminname.getText()};
+            ResultSet resultSet = db.load("SELECT adminname FROM admin WHERE adminname=?", checkUnique);
+            try {
+                int counter= 0;
+                
+                while (resultSet.next()) {
+                    counter++;
+                    
+                }
+                if(counter == 1){
+                    Object[] rowData = {txtAdminname.getText(),txtPassword.getText(), txtIdAdmin.getText()};
+
+                    PreparedStatement preparedStmt = db.connection.prepareStatement("UPDATE admin SET adminname =?, password=? WHERE idAdmin=?");            
+                    
+                    preparedStmt.setString (1, rowData[0].toString());
+                    preparedStmt.setString (2, rowData[1].toString());
+                    preparedStmt.setString (3, rowData[2].toString());
+                    preparedStmt.executeUpdate();
+                    
+                    this.dataAdmin();
+                }
+                else{
+                    JOptionPane.showInternalMessageDialog(null, "Message must be unique");
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showInternalMessageDialog(null, "SQL error, Message might not unique");
+            }
+
+
+
+        }
+        voidAdmin();
+        
+    }//GEN-LAST:event_btnUpdateAdminActionPerformed
+
+    private void txtIdAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdAdminActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdAdminActionPerformed
+
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPasswordActionPerformed
+
+    private void listLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listLogoutActionPerformed
+        this.dispose();
+        jda.jda.shutdown();
+        try {
+            db.connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        new LoginForm().setVisible(true);
+        
+        
+    }//GEN-LAST:event_listLogoutActionPerformed
+
+    private void listExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listExitActionPerformed
+
+        System.exit(0);
+    }//GEN-LAST:event_listExitActionPerformed
+
+    private void btnSearchLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchLogActionPerformed
+     
+        if(dateFromLog.getDate()!=null && dateToLog.getDate() != null){
+           filterLog();
+        }else{
+             JOptionPane.showInternalMessageDialog(null, "Date null");
+
+        }
+        
+    }//GEN-LAST:event_btnSearchLogActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1472,39 +1946,55 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddAdmin;
     private javax.swing.JButton btnAddMessage;
     private javax.swing.JButton btnBroadcast;
+    private javax.swing.JButton btnDeleteAdmin;
     private javax.swing.JButton btnDeleteCommand;
     private javax.swing.JButton btnDeleteGuild;
     private javax.swing.JButton btnDeleteMessage;
     private javax.swing.JButton btnDeleteUser;
     private javax.swing.JButton btnSchedule;
+    private javax.swing.JButton btnSearchLog;
+    private javax.swing.JButton btnUpdateAdmin;
     private javax.swing.JButton btnUpdateCommand;
     private javax.swing.JButton btnUpdateMessage;
+    private com.toedter.calendar.JDateChooser dateFromLog;
+    private com.toedter.calendar.JDateChooser dateToLog;
     private javax.swing.JComboBox<String> ddBroadType;
     private javax.swing.JComboBox<String> ddGuild;
     private com.toedter.calendar.JDateChooser inputDate;
     private javax.swing.JSpinner inputHour;
     private javax.swing.JSpinner inputMinute;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel labelCommand;
     private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelDate1;
     private javax.swing.JLabel labelDate2;
     private javax.swing.JLabel labelMsgBroadcast;
     private javax.swing.JLabel labelMsgMessage;
+    private javax.swing.JLabel labelMsgMessage1;
     private javax.swing.JLabel labelPrefix;
     private javax.swing.JLabel labelRespondCommand;
     private javax.swing.JLabel labelRespondMessage;
+    private javax.swing.JLabel labelRespondMessage1;
     private javax.swing.JLabel labelUser;
     private javax.swing.JLabel labelUser1;
     private javax.swing.JLabel labelUserId;
     private javax.swing.JLabel labelUserId1;
+    private javax.swing.JMenuItem listAdmin;
+    private javax.swing.JMenuItem listExit;
+    private javax.swing.JMenuItem listLogout;
+    private javax.swing.JMenu menuAdmin;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuBroadcast;
     private javax.swing.JMenu menuCommand;
@@ -1512,6 +2002,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu menuLog;
     private javax.swing.JMenu menuMessage;
     private javax.swing.JMenu menuUser;
+    private javax.swing.JPanel panelAdmin;
     private javax.swing.JPanel panelBroadcast;
     private javax.swing.JPanel panelCommand;
     private javax.swing.JPanel panelGuild;
@@ -1522,19 +2013,23 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane spBrodcast1;
     private javax.swing.JScrollPane spSlash1;
     private javax.swing.JScrollPane spSlash2;
+    private javax.swing.JTable tblAdmin;
     private javax.swing.JTable tblBroadcast;
     private javax.swing.JTable tblCommand;
     private javax.swing.JTable tblGuild;
     private javax.swing.JTable tblLog;
     private javax.swing.JTable tblMessage;
     private javax.swing.JTable tblUser;
+    private javax.swing.JTextField txtAdminname;
     private javax.swing.JTextArea txtBroadcast;
     private javax.swing.JTextField txtCommand;
     private javax.swing.JTextField txtGuildId;
     private javax.swing.JTextField txtGuildname;
+    private javax.swing.JTextField txtIdAdmin;
     private javax.swing.JTextField txtIdCommand;
     private javax.swing.JTextField txtIdMessage;
     private javax.swing.JTextField txtMsgMessage;
+    private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtPrefix;
     private javax.swing.JTextArea txtRespondCommand;
     private javax.swing.JTextArea txtRespondMessage;

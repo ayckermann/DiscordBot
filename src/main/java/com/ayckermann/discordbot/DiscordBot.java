@@ -14,12 +14,13 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 public class DiscordBot{
     Dotenv dotenv = Dotenv.load();
     String token = dotenv.get("DISCORD_TOKEN");
+    public BotCommands botCommands = new BotCommands();
     JDA jda;
 
     public DiscordBot() {
         try{
             jda = (JDA) JDABuilder.createDefault(token)
-                .addEventListeners(new BotCommands())
+                .addEventListeners(botCommands)
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.MESSAGE_CONTENT)
                 .setChunkingFilter(ChunkingFilter.ALL) 
                 .setMemberCachePolicy(MemberCachePolicy.ALL)

@@ -27,7 +27,9 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class BotCommands extends ListenerAdapter{
     private Database db = new Database();
-    
+    private Meme meme = new Meme();
+    private Joke joke = new Joke();
+    private ChatGPT chatGPT =  new ChatGPT();
     public boolean  isRegister(String id){   
         Object[] select = {id};
         String databaseId = response("SELECT userId FROM user WHERE userId=?", select,"userId");
@@ -327,19 +329,19 @@ public class BotCommands extends ListenerAdapter{
                    type = option.getAsString();
                 }
 
-                String[] joke = {};
+                String[] jokes = {};
      
                 if(type.isEmpty()){
                     type = "";
                 }
-                joke = new Joke().generateJoke(type);     
+                jokes = joke.generateJoke(type);     
 
      
 
                 if(joke != null){
-                    event.getHook().sendMessage(joke[0]).queue();
+                    event.getHook().sendMessage(jokes[0]).queue();
 
-                    final String punchline = joke[1];
+                    final String punchline = jokes[1];
                     Timer timer = new Timer();
                     timer.schedule(new TimerTask() {
                        @Override
@@ -348,7 +350,7 @@ public class BotCommands extends ListenerAdapter{
                        }
                     }, 5000);  
                     
-                    Object[] log = {event.getUser().getId(),event.getUser().getName(),"/joke "+type,joke[0]+"\n"+joke[1]};
+                    Object[] log = {event.getUser().getId(),event.getUser().getName(),"/joke "+type,jokes[0]+"\n"+jokes[1]};
                     db.edit("INSERT INTO log (userId,username,incoming,outgoing)"
                             + "VALUES(?,?,?,?)",log ); 
                 } 
@@ -362,10 +364,10 @@ public class BotCommands extends ListenerAdapter{
 
             else if(event.getName().equals("meme")){
                 event.deferReply().queue();
-                String meme="";
+                String memes="";
 
                 try {
-                    meme = new Meme().generateMeme();
+                    memes = meme.generateMeme();
                 } catch (IOException ex) {
                     Logger.getLogger(BotCommands.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {
@@ -374,7 +376,7 @@ public class BotCommands extends ListenerAdapter{
 
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setColor(Color.CYAN);
-                eb.setImage(meme);
+                eb.setImage(memes);
                 event.getHook().sendMessageEmbeds(eb.build()).queue();
                 
                 Object[] log = {event.getUser().getId(),event.getUser().getName(),"/meme",meme};
@@ -416,7 +418,7 @@ public class BotCommands extends ListenerAdapter{
                 }
                 else{
                     try {
-                        response = new ChatGPT().gpt(message);
+                        response = chatGPT.gpt(message);
                         if(response.length() < 2000){
                             event.getHook().sendMessage(message + "\n" + response).queue();
                         }else{

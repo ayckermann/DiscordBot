@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ayckermann.discordbot;
 
 import java.sql.ResultSet;
@@ -14,10 +10,7 @@ import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
-/**
- *
- * @author ASUS VIVOBOOK
- */
+
 public class Broadcast extends DiscordBot{
     private Database db = new Database();
     
